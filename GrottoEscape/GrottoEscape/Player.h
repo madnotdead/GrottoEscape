@@ -1,7 +1,7 @@
 #pragma once
 #include "AnimatedSprite.h"
 class Player :
-	public sf::Sprite
+	public AnimatedSprite
 {
 public:
 	Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers);
@@ -25,7 +25,7 @@ private:
 	std::vector<tmx::MapLayer> layers;
 	sf::Vector2f playerVelocity;
 	bool onGround;
-	bool inAir;
+	float inAir;
 	//tmx::MapLayer collisionLayer;
 };
 

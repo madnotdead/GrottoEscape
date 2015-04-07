@@ -2,7 +2,7 @@
 #include "Player.h"
 
 
-Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers )/* :AnimatedSprite(sf::seconds(0.2), true, false)*/
+Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :AnimatedSprite(sf::seconds(0.2), true, false)
 {
 	window = wnd;
 	layers = _layers;
@@ -22,10 +22,10 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers )/* :An
 	}
 	
 	// set up the animations for all four directions (set spritesheet and push frames)
-	this->setColor(sf::Color::Red);
-	this->setTexture(texture);
-	this->setTextureRect(sf::IntRect(0, 0, 16, 16));
-	this->setScale(sf::Vector2f(2, 2));
+	//this->setColor(sf::Color::Red);
+	//this->setTexture(texture);
+	//this->setTextureRect(sf::IntRect(0, 0, 16, 16));
+	//this->setScale(sf::Vector2f(2, 2));
 
 	idleAnimationRight.setSpriteSheet(texture);
 	idleAnimationRight.addFrame(sf::IntRect(16, 16, 16, 16));
@@ -78,22 +78,11 @@ Player::~Player()
 
 void Player::Loop(sf::Time dt)
 {
-	float maxInAir = 2;
+	float maxInAir = 1.2f;
 	float gravity = 100;
 	// if a key was pressed set the correct animation and move correctly
 	sf::Vector2f movement(0.f, 0.f);
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	//{
-	//	currentAnimation = &walkingAnimationUp;
-	//	movement.y -= speed;
-	//	noKeyWasPressed = false;
-	//}
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		currentAnimation = &walkingAnimationDown;
-		movement.y += speed;
-		noKeyWasPressed = false;
-	}*/
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		currentAnimation = &walkingAnimationLeft;
@@ -116,6 +105,7 @@ void Player::Loop(sf::Time dt)
 	{
 		movement.y = -gravity;
 		inAir += dt.asSeconds();
+		std::cout << "inAir: " << inAir << std::endl;
 	}
 	else
 	{
@@ -124,7 +114,7 @@ void Player::Loop(sf::Time dt)
 	}
 
 	
-	//play(*currentAnimation);
+	play(*currentAnimation);
 	move(movement * dt.asSeconds());
 
 	// if no key was pressed stop the animation
@@ -140,7 +130,7 @@ void Player::Loop(sf::Time dt)
 	noKeyWasPressed = true;
 
 	// update AnimatedSprite
-	//update(dt);
+	update(dt);
 
 	HandleCollision();
 	
@@ -199,5 +189,5 @@ void Player::HandleCollision()
 		}
 	}
 
-	std::cout << "player.x" << getPosition().x << " " << "player.y" << getPosition().y << std::endl;
+	//std::cout << "player.x" << getPosition().x << " " << "player.y" << getPosition().y << std::endl;
 }
