@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="128" height="80"/>
+ </tileset>
+ <layer name="Collision" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzjEOgCAMQFEuwWBxQb3/GamDSdNg0QWW/5IfommVlAAAAAAAwJvsWvUNxDataGJO6bx7zt3tyqDRfAm6d6t2aKcper7M/6qb6/V33u/anS/3nH2/Bk7WDiw=
+  </data>
+ </layer>
+ <layer name="NonCollision" width="40" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt0bEKACAIhOHb3er937VJaqihM2j5Dz5cVARDUgAAAAAAgK1MLNXdocKO35rhdjb7u8HJ6T+v+qvhvpkB2XwvqQ==
+  </data>
+ </layer>
+ <objectgroup name="Coll">
+  <object x="-1" y="431" width="209" height="51.25"/>
+  <object x="240" y="432.182" width="159.333" height="48.4848"/>
+  <object x="432.25" y="431.75" width="258.5" height="66.25"/>
+  <object x="496" y="383.5" width="64.25" height="16.75"/>
+  <object x="224.25" y="384.25" width="63.75" height="15.75"/>
+ </objectgroup>
+</map>
