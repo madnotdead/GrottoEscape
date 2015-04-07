@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Collision" width="40" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzjEOgCAMQFEuwWBxQb3/GamDSdNg0QWW/5IfommVlAAAAAAAwJvsWvUNxDataGJO6bx7zt3tyqDRfAm6d6t2aKcper7M/6qb6/V33u/anS/3nH2/Bk7WDiw=
+   eJzt1DEPQDAQBeAjGJoYDAZlKf7/b9SGJtUoVxIVecOXC+nVszxBRAIAAAAAAFg6TTINCfJl2sQ0I99hvvxCynwx/1B8IMtftJ5Ud6TW3BC7++Rbpp97WvvXTnnwzk7T0aVWEa/bQ+dD97vT7CptpH3PnT2bjqk3inidGXPe33V3ODnfzrcA9wM8Rw==
   </data>
  </layer>
  <layer name="NonCollision" width="40" height="30" visible="0">
@@ -19,5 +19,7 @@
   <object x="432.25" y="431.75" width="258.5" height="66.25"/>
   <object x="496" y="383.5" width="64.25" height="16.75"/>
   <object x="224.25" y="384.25" width="63.75" height="15.75"/>
+  <object x="0.25" y="287.75" width="192" height="64.25"/>
+  <object x="144.25" y="352" width="47.75" height="15.75"/>
  </objectgroup>
 </map>

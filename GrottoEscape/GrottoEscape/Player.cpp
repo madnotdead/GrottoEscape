@@ -2,7 +2,7 @@
 #include "Player.h"
 
 
-Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :AnimatedSprite(sf::seconds(0.2), true, false)
+Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers )/* :AnimatedSprite(sf::seconds(0.2), true, false)*/
 {
 	window = wnd;
 	layers = _layers;
@@ -22,8 +22,11 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	}
 	
 	// set up the animations for all four directions (set spritesheet and push frames)
+	this->setColor(sf::Color::Red);
+	this->setTexture(texture);
+	this->setTextureRect(sf::IntRect(0, 0, 16, 16));
+	this->setScale(sf::Vector2f(2, 2));
 
-	
 	idleAnimationRight.setSpriteSheet(texture);
 	idleAnimationRight.addFrame(sf::IntRect(16, 16, 16, 16));
 
@@ -75,8 +78,8 @@ Player::~Player()
 
 void Player::Loop(sf::Time dt)
 {
-	float maxInAir = 0.8f;
-	float gravity = 500;
+	float maxInAir = 2;
+	float gravity = 100;
 	// if a key was pressed set the correct animation and move correctly
 	sf::Vector2f movement(0.f, 0.f);
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -106,6 +109,9 @@ void Player::Loop(sf::Time dt)
 		facingRight = true;
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		setPosition(sf::Vector2f(50, 250));
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && (onGround || inAir < maxInAir))
 	{
 		movement.y = -gravity;
@@ -118,13 +124,13 @@ void Player::Loop(sf::Time dt)
 	}
 
 	
-	play(*currentAnimation);
+	//play(*currentAnimation);
 	move(movement * dt.asSeconds());
 
 	// if no key was pressed stop the animation
 	if (noKeyWasPressed)
 	{
-		stop();
+		//stop();
 
 		if (facingRight)
 			currentAnimation = &idleAnimationRight;
@@ -134,7 +140,7 @@ void Player::Loop(sf::Time dt)
 	noKeyWasPressed = true;
 
 	// update AnimatedSprite
-	update(dt);
+	//update(dt);
 
 	HandleCollision();
 	
@@ -157,19 +163,19 @@ void Player::HandleCollision()
 						{
 							if (area.width > area.height)
 							{
-								if (area.contains({ area.left, getPosition().y }))
-								{
-									// Up side crash
-									setPosition({ getPosition().x, getPosition().y + area.height });
-									std::cout << "Up side crash" << std::endl;
-								}
-								else
+								if (!area.contains({ area.left, getPosition().y }))
 								{
 									// Down side crash
 									onGround = true;
 									inAir = 0.f;
-									setPosition({ getPosition().x, getPosition().y - area.height });
+									setPosition({ getPosition().x, getPosition().y - area.height - 1 });
 									std::cout << "Down side crash" << std::endl;
+								}
+								else
+								{
+									// Up side crash
+									setPosition({ getPosition().x, getPosition().y + area.height + 1 });
+									std::cout << "Up side crash" << std::endl;
 								}
 							}
 							else if (area.width < area.height)
@@ -192,4 +198,6 @@ void Player::HandleCollision()
 			}
 		}
 	}
+
+	std::cout << "player.x" << getPosition().x << " " << "player.y" << getPosition().y << std::endl;
 }

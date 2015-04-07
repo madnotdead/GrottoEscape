@@ -5,7 +5,7 @@
 Game::Game(int width, int height) 
 {
 	wnd = new sf::RenderWindow(sf::VideoMode(width, height), "Grotto Escape");
-	wnd->setVerticalSyncEnabled(true);
+	//wnd->setVerticalSyncEnabled(true);
 	wnd->setFramerateLimit(60);
 }
 
