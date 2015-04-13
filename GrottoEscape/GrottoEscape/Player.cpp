@@ -2,7 +2,7 @@
 #include "Player.h"
 
 
-Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :AnimatedSprite(sf::seconds(0.2), true, false)
+Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :AnimatedSprite(sf::seconds(0.2f), true, false)
 {
 	window = wnd;
 	layers = _layers;
@@ -22,45 +22,41 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	}
 	
 	// set up the animations for all four directions (set spritesheet and push frames)
-	//this->setColor(sf::Color::Red);
-	//this->setTexture(texture);
-	//this->setTextureRect(sf::IntRect(0, 0, 16, 16));
-	//this->setScale(sf::Vector2f(2, 2));
-
 	idleAnimationRight.setSpriteSheet(texture);
 	idleAnimationRight.addFrame(sf::IntRect(16, 16, 16, 16));
 
-	
 	idleAnimationLeft.setSpriteSheet(textureInverted);
 	idleAnimationLeft.addFrame(sf::IntRect(32, 16, 16, 16));
 
+	jumpLeftAnimation.setSpriteSheet(textureInverted);
+	jumpLeftAnimation.addFrame(sf::IntRect(48, 16, 16, 16));
 	
-	walkingAnimationDown.setSpriteSheet(texture);
-	walkingAnimationDown.addFrame(sf::IntRect(32, 0, 32, 32));
-	walkingAnimationDown.addFrame(sf::IntRect(64, 0, 32, 32));
-	walkingAnimationDown.addFrame(sf::IntRect(32, 0, 32, 32));
-	walkingAnimationDown.addFrame(sf::IntRect(0, 0, 32, 32));
+	jumpRightAnimation.setSpriteSheet(texture);
+	jumpRightAnimation.addFrame(sf::IntRect(0, 16, 16, 16));
 
 	walkingAnimationLeft.setSpriteSheet(textureInverted);
 	walkingAnimationLeft.addFrame(sf::IntRect(48, 0, 16, 16));
 	walkingAnimationLeft.addFrame(sf::IntRect(32, 0, 16, 16));
 	walkingAnimationLeft.addFrame(sf::IntRect(16, 0, 16, 16));
-		
+
 	walkingAnimationRight.setSpriteSheet(texture);
 	walkingAnimationRight.addFrame(sf::IntRect(0, 0, 16, 16));
 	walkingAnimationRight.addFrame(sf::IntRect(16, 0, 16, 16));
 	walkingAnimationRight.addFrame(sf::IntRect(32, 0, 16, 16));
 		
-	walkingAnimationUp.setSpriteSheet(texture);
-	walkingAnimationUp.addFrame(sf::IntRect(0, 16, 16, 16));
-	//walkingAnimationUp.addFrame(sf::IntRect(64, 96, 32, 32));
-	//walkingAnimationUp.addFrame(sf::IntRect(32, 96, 32, 32));
-	//walkingAnimationUp.addFrame(sf::IntRect(0, 96, 32, 32));
+	deadAnimation.setSpriteSheet(texture);
+	deadAnimation.addFrame(sf::IntRect(48, 16, 16, 16));
+
+	shootLeftAnimation.setSpriteSheet(textureInverted);
+	shootLeftAnimation.addFrame(sf::IntRect(0, 0, 16, 16));
+
+	shootRightAnimation.setSpriteSheet(texture);
+	shootRightAnimation.addFrame(sf::IntRect(48, 0, 16, 16));
 
 	currentAnimation = &idleAnimationRight;
 
 	// set up AnimatedSprite
-	setPosition(sf::Vector2f(50,250));
+	setPosition(sf::Vector2f(50,272));
 
 	speed = 80.f;
 	noKeyWasPressed = true;
@@ -69,6 +65,11 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
 	playerVelocity.x = 0;
 	playerVelocity.y = 200;
+
+	GetLayers();
+
+	jumpF = 400;
+	mass = 75;
 }
 
 
@@ -78,49 +79,112 @@ Player::~Player()
 
 void Player::Loop(sf::Time dt)
 {
-	float maxInAir = 1.2f;
+	float maxInAir = 0.3f;
 	float gravity = 100;
 	// if a key was pressed set the correct animation and move correctly
 	sf::Vector2f movement(0.f, 0.f);
-
+	float velX = 0.0f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		currentAnimation = &walkingAnimationLeft;
+		if (onGround)
+			currentAnimation = &walkingAnimationLeft;
+
 		movement.x -= speed;
+		velX = -80.0f;
 		noKeyWasPressed = false;
 		facingRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
+		if (onGround)
 		currentAnimation = &walkingAnimationRight;
+
 		movement.x += speed;
 		noKeyWasPressed = false;
 		facingRight = true;
+		velX = 80.0f;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		setPosition(sf::Vector2f(50, 250));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && (onGround || inAir < maxInAir))
+
+	/////////////////////////////////////////////////////////DEBUG
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+	//	currentAnimation = &deadAnimation;
+
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+	//	currentAnimation = &shootLeftAnimation;
+
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	//	currentAnimation = &shootRightAnimation;
+
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	//	currentAnimation = &jumpLeftAnimation;
+
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
+	//	currentAnimation = &jumpRightAnimation;
+	/////////////////////////////////////////////////////////DEBUG
+	float velY = 2.0f;
+
+	std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
+	float currentFloorHeigth = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
 	{
-		movement.y = -gravity;
+		/*movement.y -= gravity;
 		inAir += dt.asSeconds();
-		std::cout << "inAir: " << inAir << std::endl;
+
+		if (facingRight)
+			currentAnimation = &jumpRightAnimation;
+		else
+			currentAnimation = &jumpLeftAnimation;*/
+		velY = -2.0f;
+		isJumping = true;
+		currentFloorHeigth = getPosition().y + 16;
 	}
-	else
+	//else
+	//{
+	//	movement.y += gravity;
+	//	inAir = maxInAir;
+	//}
+
+	if (isJumping)
 	{
-		movement.y = gravity;
-		inAir = maxInAir;
+		if (getPosition().y <= currentFloorHeigth + 20)
+			velY = 2.0f;
+	}
+		
+		
+	float yPosition = getPosition().y + velY + dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
+
+	float xPosition = getPosition().x + velX * dt.asSeconds();
+	setPosition(xPosition, yPosition);
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isJumping)
+	{
+		isJumping = true;
+		speed = jumpF / mass;
 	}
 
+	if (isJumping){
 	
+		Jump(dt.asSeconds());
+
+		if (onGround)
+			isJumping = false;
+	}
+*/
+
+
+//	movement.y += movement.y + gravity;
+
 	play(*currentAnimation);
-	move(movement * dt.asSeconds());
+	//move(movement * dt.asSeconds());
 
 	// if no key was pressed stop the animation
 	if (noKeyWasPressed)
 	{
-		//stop();
+		stop();
 
 		if (facingRight)
 			currentAnimation = &idleAnimationRight;
@@ -132,62 +196,75 @@ void Player::Loop(sf::Time dt)
 	// update AnimatedSprite
 	update(dt);
 
-	HandleCollision();
-	
+	HandleCollision();	
+}
+
+void Player::GetLayers()
+{
+	if (layers.size() > 0)
+	{
+		for (auto layer = layers.begin(); layer != layers.end(); ++layer)
+		{
+			if (!(layer->name == "Coll"))
+				continue;
+
+			collisionObjects = layer->objects;
+		}
+	}
 }
 
 void Player::HandleCollision()
 {
 	sf::Rect<float> area;
-	onGround = false;
 
-	if (layers.size() > 0)
+	if (collisionObjects.size() > 0)
 	{
-		for (auto layer = layers.begin(); layer != layers.end(); ++layer)
-		{
-			if (layer->name == "Coll")
+		for (auto object = collisionObjects.begin(); object != collisionObjects.end(); ++object)
+		{			
+			if (object->GetAABB().intersects(getGlobalBounds(), area))
 			{
-				for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
-				{			
-						if (object->GetAABB().intersects(getGlobalBounds(), area))
-						{
-							if (area.width > area.height)
-							{
-								if (!area.contains({ area.left, getPosition().y }))
-								{
-									// Down side crash
-									onGround = true;
-									inAir = 0.f;
-									setPosition({ getPosition().x, getPosition().y - area.height - 1 });
-									std::cout << "Down side crash" << std::endl;
-								}
-								else
-								{
-									// Up side crash
-									setPosition({ getPosition().x, getPosition().y + area.height + 1 });
-									std::cout << "Up side crash" << std::endl;
-								}
-							}
-							else if (area.width < area.height)
-							{
-								if (area.contains({ getPosition().x + getGlobalBounds().width - 1.f, area.top + 1.f }))
-								{
-									//Right side crash
-									setPosition({ getPosition().x - area.width, getPosition().y });
-									std::cout << "Right side crash" << std::endl;
-								}
-								else
-								{
-									//Left side crash
-									setPosition({ getPosition().x + area.width, getPosition().y });
-									std::cout << "Left side crash" << std::endl;
-								}
-							}
-						}
+				if (area.width > area.height)
+				{
+					if (!area.contains({ area.left, getPosition().y }))
+					{
+						// Down side crash
+						onGround = true;
+						inAir = 0.f;
+						setPosition({ getPosition().x, getPosition().y - area.height });
+						//std::cout << "Down side crash" << std::endl;
+					}
+					else
+					{
+						onGround = false;
+
+						// Up side crash
+						setPosition({ getPosition().x, getPosition().y + area.height });
+						//std::cout << "Up side crash" << std::endl;
+					}
+				}
+				else if (area.width < area.height)
+				{
+					if (area.contains({ getPosition().x + getGlobalBounds().width - 1.f, area.top + 1.f }))
+					{
+						//Right side crash
+						setPosition({ getPosition().x - area.width, getPosition().y });
+						std::cout << "Right side crash" << std::endl;
+					}
+					else
+					{
+						//Left side crash
+						setPosition({ getPosition().x + area.width, getPosition().y });
+						std::cout << "Left side crash" << std::endl;
+					}
 				}
 			}
 		}
 	}
+}
 
-	//std::cout << "player.x" << getPosition().x << " " << "player.y" << getPosition().y << std::endl;
+void Player::Jump(float deltaTime)
+{
+	speed -= 9.8 * deltaTime;
+
+	move(0, -speed);
 }

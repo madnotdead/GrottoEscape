@@ -45,22 +45,52 @@ void Game::HandleInput()
 	}
 }
 
+
+float Game::getFPS(const sf::Time& time) {
+	return (1000000.0f / time.asMicroseconds());
+}
+
 void Game::MainLoop()
 {
+
+	sf::Clock FPSClock;
 	tmx::MapLoader ml("maps/");
 	ml.Load("map_test.tmx");
 	sf::Clock frameClock;
 	sf::Time frameTime;
 	Player* mPlayer = new Player(wnd,ml.GetLayers());
+
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, 800/2, 600/2));
+	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	sf::Vector2f viewPosition(800 / 2, 600 / 2);
+	//view.zoom(0.8f);
 	while(wnd->isOpen())
 	{
 		frameTime = frameClock.restart();
 		
 		mPlayer->Loop(frameTime);
 
+		//if (mPlayer->getPosition().x + 10 < 400)
+		//	viewPosition.x = mPlayer->getPosition().x + 100;
+		//else
+			//viewPosition.x = mPlayer->getPosition().x;
+
+		//	viewPosition.y = mPlayer->getPosition().y;
+		//}
+		//	
+		//else
+		//	viewPosition.x = 800 / 2;
+
+		//view.setCenter(viewPosition);
+		//wnd->setView(view);
 		wnd->clear();
 		wnd->draw(ml);
 		wnd->draw(*mPlayer);
 		wnd->display();
+
+		//float fps = getFPS(FPSClock.restart());
+
+		//std::cout << getFPS(FPSClock.restart()) << std::endl;
 	}
 }
