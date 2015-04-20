@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Game.h"
 
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(int width, int height) 
 {
 	wnd = new sf::RenderWindow(sf::VideoMode(width, height), "Grotto Escape");
-	//wnd->setVerticalSyncEnabled(true);
-	wnd->setFramerateLimit(60);
+	wnd->setVerticalSyncEnabled(true);
+	//wnd->setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -65,32 +66,28 @@ void Game::MainLoop()
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	sf::Vector2f viewPosition(800 / 2, 600 / 2);
 	//view.zoom(0.8f);
+
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
 	while(wnd->isOpen())
 	{
 		frameTime = frameClock.restart();
-		
-		mPlayer->Loop(frameTime);
+		timeSinceLastUpdate += frameTime;
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
 
-		//if (mPlayer->getPosition().x + 10 < 400)
-		//	viewPosition.x = mPlayer->getPosition().x + 100;
-		//else
-			//viewPosition.x = mPlayer->getPosition().x;
+			mPlayer->Loop(frameTime);
+		}
 
-		//	viewPosition.y = mPlayer->getPosition().y;
-		//}
-		//	
-		//else
-		//	viewPosition.x = 800 / 2;
-
-		//view.setCenter(viewPosition);
-		//wnd->setView(view);
+	
 		wnd->clear();
 		wnd->draw(ml);
 		wnd->draw(*mPlayer);
 		wnd->display();
-
-		//float fps = getFPS(FPSClock.restart());
-
-		//std::cout << getFPS(FPSClock.restart()) << std::endl;
 	}
+}
+
+void Game::Draw()
+{
 }

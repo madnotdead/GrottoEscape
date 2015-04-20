@@ -63,8 +63,8 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	facingRight = true;
 
 	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
-	playerVelocity.x = 0;
-	playerVelocity.y = 200;
+	//playerVelocity.x = 0;
+	//playerVelocity.y = 200;
 
 	GetLayers();
 
@@ -79,30 +79,36 @@ Player::~Player()
 
 void Player::Loop(sf::Time dt)
 {
-	float maxInAir = 0.3f;
+	float maxInAir = 0.4f;
 	float gravity = 100;
 	// if a key was pressed set the correct animation and move correctly
-	sf::Vector2f movement(0.f, 0.f);
+	sf::Vector2f movement(0.f, 0.f); 
+	float velY = 80.0f;
 	float velX = 0.0f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		if (onGround)
 			currentAnimation = &walkingAnimationLeft;
+		else
+			currentAnimation = facingRight ? &jumpRightAnimation : &jumpRightAnimation;
 
 		movement.x -= speed;
 		velX = -80.0f;
 		noKeyWasPressed = false;
 		facingRight = false;
+		playerVelocity.x -= speed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		if (onGround)
-		currentAnimation = &walkingAnimationRight;
-
+			currentAnimation = &walkingAnimationRight;
+		else
+			currentAnimation = facingRight ? &jumpRightAnimation : &jumpRightAnimation;
 		movement.x += speed;
 		noKeyWasPressed = false;
 		facingRight = true;
 		velX = 80.0f;
+		playerVelocity.x += speed;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -125,41 +131,43 @@ void Player::Loop(sf::Time dt)
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	//	currentAnimation = &jumpRightAnimation;
 	/////////////////////////////////////////////////////////DEBUG
-	float velY = 2.0f;
+	//velY = 100.0f;
 
-	std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
+	//std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
 	float currentFloorHeigth = 0;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&( onGround || inAir < maxInAir))
 	{
-		/*movement.y -= gravity;
+		
 		inAir += dt.asSeconds();
-
+		/*movement.y -= gravity;
 		if (facingRight)
 			currentAnimation = &jumpRightAnimation;
 		else
 			currentAnimation = &jumpLeftAnimation;*/
-		velY = -2.0f;
-		isJumping = true;
-		currentFloorHeigth = getPosition().y + 16;
+		movement.y = -100;
+		//isJumping = true;
+		//currentFloorHeigth = getPosition().y + 16;
+		onGround = false;
 	}
-	//else
-	//{
-	//	movement.y += gravity;
-	//	inAir = maxInAir;
-	//}
+	else
+	{
+		movement.y = 100;
+		inAir = maxInAir;
+	}
 
-	if (isJumping)
+/*	if (isJumping)
 	{
 		if (getPosition().y <= currentFloorHeigth + 20)
 			velY = 2.0f;
 	}
+	*/	
 		
-		
-	float yPosition = getPosition().y + velY + dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
+	//float yPosition = getPosition().y + velY * dt.asSeconds();// +4.9f * (dt.asSeconds() * 2);
+	//std::cout << "velY: " << velY << " - " << "yPosition: " << yPosition << std::endl;
+	//float xPosition = getPosition().x + velX * dt.asSeconds();
 
-	float xPosition = getPosition().x + velX * dt.asSeconds();
-	setPosition(xPosition, yPosition);
+	//setPosition(xPosition, yPosition);
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isJumping)
 	{
 		isJumping = true;
@@ -179,7 +187,7 @@ void Player::Loop(sf::Time dt)
 //	movement.y += movement.y + gravity;
 
 	play(*currentAnimation);
-	//move(movement * dt.asSeconds());
+	move(movement * dt.asSeconds());
 
 	// if no key was pressed stop the animation
 	if (noKeyWasPressed)
@@ -216,7 +224,7 @@ void Player::GetLayers()
 void Player::HandleCollision()
 {
 	sf::Rect<float> area;
-
+	onGround = false;
 	if (collisionObjects.size() > 0)
 	{
 		for (auto object = collisionObjects.begin(); object != collisionObjects.end(); ++object)
@@ -247,11 +255,13 @@ void Player::HandleCollision()
 					if (area.contains({ getPosition().x + getGlobalBounds().width - 1.f, area.top + 1.f }))
 					{
 						//Right side crash
+						onGround = false;
 						setPosition({ getPosition().x - area.width, getPosition().y });
 						std::cout << "Right side crash" << std::endl;
 					}
 					else
 					{
+						onGround = false;
 						//Left side crash
 						setPosition({ getPosition().x + area.width, getPosition().y });
 						std::cout << "Left side crash" << std::endl;
