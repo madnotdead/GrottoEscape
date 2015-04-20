@@ -1,5 +1,6 @@
 #pragma once
 #include "AnimatedSprite.h"
+#include "Bullet.h"
 class Player :
 	public AnimatedSprite
 {
@@ -10,6 +11,8 @@ public:
 	void HandleCollision();
 	void GetLayers();
 	void Jump(float deltaTime);
+	void DrawBullets();
+	std::vector<Bullet*> bullets;
 private:
 	Animation walkingAnimationUp;
 	Animation walkingAnimationRight;
@@ -44,6 +47,15 @@ private:
 	float floorHeigth;
 	float mass;
 	float jumpF;
+	float yPosition;
+	float xPosition;
+	float jumpRate;
+	float jumpTime;
+	sf::Vector2f shootSpawn;
+	void Shoot();
+	float shootRate;
+	float shootTime;
+
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 };
