@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(int width, int height) 
 {
@@ -64,29 +65,51 @@ void Game::MainLoop()
 	view.reset(sf::FloatRect(0, 0, 800/2, 600/2));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	sf::Vector2f viewPosition(800 / 2, 600 / 2);
-	//view.zoom(0.8f);
+	view.zoom(0.8f);
+
+	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
 	while(wnd->isOpen())
 	{
-		frameTime = frameClock.restart();
-		
-		mPlayer->Loop(frameTime);
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
 
-		//if (mPlayer->getPosition().x + 10 < 400)
-		//	viewPosition.x = mPlayer->getPosition().x + 100;
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+
+			mPlayer->Loop(TimePerFrame);
+		}
+
+
+	
+		//if (mPlayer->getPosition().x > 50 ){
+			//viewPosition.x = mPlayer->getPosition().x + 100;
+			//viewPosition.y = mPlayer->getPosition().y - 50;
+		//}
 		//else
-			//viewPosition.x = mPlayer->getPosition().x;
+		//{
+		//	viewPosition.x = mPlayer->getPosition().x;
+		//	viewPosition.y = mPlayer->getPosition().y ;
+		//}
+		//	
+
+		//else
+		//	viewPosition.x = mPlayer->getPosition().x;
 
 		//	viewPosition.y = mPlayer->getPosition().y;
 		//}
-		//	
-		//else
-		//	viewPosition.x = 800 / 2;
 
-		//view.setCenter(viewPosition);
-		//wnd->setView(view);
+		view.setCenter(mPlayer->getPosition());
+		wnd->setView(view);
 		wnd->clear();
 		wnd->draw(ml);
 		wnd->draw(*mPlayer);
+		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
+		{
+			if (mPlayer->bullets.at(i)->isActive())
+				wnd->draw(*mPlayer->bullets.at(i));
+		}
 		wnd->display();
 
 		//float fps = getFPS(FPSClock.restart());

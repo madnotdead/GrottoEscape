@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="20" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
   <image source="tiles.png" width="128" height="80"/>
  </tileset>
- <layer name="Collision" width="40" height="30">
+ <layer name="Tiles" width="80" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1L0OQDAUBeBLMEgMBoOy+Hn/Z9SGRjXFLdIazvClIb3t6XJKIioBAAAAAICllQRTHyFfIk1MM/I586U3YubzeUP2gyywayxfnxviDfUDvrNv7lL93NHav3oVjn96VR2dSwXxuv1s/9n55qpmB2mkY89dfauOqTYD8TrTZ789a85wcobOtwCcxzwx
+   eJzt1MsKwjAQheHUXhZeVqJY60bq+z+jLSYQQtLO1CnJwFl8tEgv8R/S0RgzAgAAAAAA/KkmGDIqucusmRxXvAuYM9eB0WBLE44S+9W2UYz0/9fcT0OfNdXCrPekrVOoN79veO51aDS3c3uIcv05QLnnJLDGp6CX9+w74Ty1Hr+d6xf2obbyG12Fut7sUfq7/Jm0Vuedt5Hfu8j8Us/NvRdis3/s1O/CQH2/9D7h7qlw7u6opd8XHM6m1g==
   </data>
  </layer>
- <layer name="NonCollision" width="40" height="30" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJzt0bEKACAIhOHb3er937VJaqihM2j5Dz5cVARDUgAAAAAAgK1MLNXdocKO35rhdjb7u8HJ6T+v+qvhvpkB2XwvqQ==
-  </data>
- </layer>
- <objectgroup name="Coll">
-  <object x="-1" y="431" width="209" height="51.25"/>
-  <object x="240" y="432.182" width="159.333" height="48.4848"/>
-  <object x="432.25" y="431.75" width="258.5" height="66.25"/>
-  <object x="496" y="383.5" width="64.25" height="16.75"/>
-  <object x="0.25" y="287.75" width="192" height="64.25"/>
-  <object x="144.25" y="352" width="47.75" height="15.75"/>
-  <object x="208" y="399.5" width="32.25" height="16.75"/>
+ <objectgroup name="Collision">
+  <object x="0" y="304.5" width="511" height="16.5"/>
+  <object x="592" y="287.5" width="16" height="16.5"/>
+  <object x="609.667" y="255.5" width="333" height="65"/>
+  <object x="976.667" y="256" width="16" height="16.6667"/>
+  <object x="1023.67" y="255.667" width="16" height="15.6667"/>
+  <object x="1072.33" y="255.667" width="15.6667" height="16.3333"/>
+  <object x="544.333" y="287.667" width="15.6667" height="16"/>
+  <object x="575.667" y="272" width="15.6667" height="15"/>
+  <object x="1" y="1" width="493" height="237"/>
+  <object x="495" y="0" width="95" height="223"/>
+  <object x="592" y="0" width="127" height="207"/>
+  <object x="720" y="-1" width="255" height="193"/>
+  <object x="978" y="-1" width="174" height="175"/>
+  <object x="1153" y="-1" width="126" height="160"/>
+  <object x="1121" y="271" width="160" height="46"/>
+  <object x="1186" y="255" width="92" height="16"/>
+  <object x="1234" y="240" width="43" height="15"/>
+  <object x="1250" y="223" width="26" height="14"/>
+ </objectgroup>
+ <objectgroup name="Player" visible="0">
+  <object x="22.6667" y="292.667"/>
+  <object x="26.6667" y="-13.3333" width="1.33333"/>
  </objectgroup>
 </map>

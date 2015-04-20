@@ -6,6 +6,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 {
 	window = wnd;
 	layers = _layers;
+	onGround = false;
 	// load texture (spritesheet)
 	//sf::Texture texture;
 	if (!texture.loadFromFile("img/player_2.png"))
@@ -56,20 +57,25 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	currentAnimation = &idleAnimationRight;
 
 	// set up AnimatedSprite
-	setPosition(sf::Vector2f(50,272));
+	setPosition(sf::Vector2f(50,300));
 
 	speed = 80.f;
 	noKeyWasPressed = true;
 	facingRight = true;
 
 	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
-	playerVelocity.x = 0;
-	playerVelocity.y = 200;
-
+	playerVelocity = sf::Vector2f(0, 0);
 	GetLayers();
 
 	jumpF = 400;
 	mass = 75;
+
+	jumpRate = 0.6f;
+	shootRate = 0.5f;
+	for (size_t i = 0; i < 10; i++)
+	{
+		bullets.push_back(new Bullet(collisionObjects));
+	}
 }
 
 
@@ -80,10 +86,14 @@ Player::~Player()
 void Player::Loop(sf::Time dt)
 {
 	float maxInAir = 0.3f;
-	float gravity = 100;
+	float gravity = 20;
 	// if a key was pressed set the correct animation and move correctly
 	sf::Vector2f movement(0.f, 0.f);
+	
+
+
 	float velX = 0.0f;
+	playerVelocity.x = 0;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		if (onGround)
@@ -93,20 +103,44 @@ void Player::Loop(sf::Time dt)
 		velX = -80.0f;
 		noKeyWasPressed = false;
 		facingRight = false;
+		playerVelocity.x = -80;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		if (onGround)
 		currentAnimation = &walkingAnimationRight;
 
-		movement.x += speed;
+		movement.x = speed;
 		noKeyWasPressed = false;
 		facingRight = true;
 		velX = 80.0f;
+		playerVelocity.x = 80;
+	}
+
+	if (facingRight)
+		shootSpawn = sf::Vector2f(getPosition().x + 8, getPosition().y);
+	else
+		shootSpawn = sf::Vector2f(getPosition().x - 8 , getPosition().y);
+
+	shootTime += dt.asSeconds();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && shootTime > shootRate)
+	{
+		if (facingRight)
+			currentAnimation = &shootRightAnimation;
+		else
+			currentAnimation = &shootLeftAnimation;
+
+		Shoot();
+		std::cout << "ShootSpawn: "<< shootSpawn.x << "," << shootSpawn.y << std::endl;
+		shootTime = 0.0f;
+
+		noKeyWasPressed = false;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		setPosition(sf::Vector2f(50, 250));
+		setPosition(sf::Vector2f(50,275));
 
 
 	/////////////////////////////////////////////////////////DEBUG
@@ -125,61 +159,54 @@ void Player::Loop(sf::Time dt)
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	//	currentAnimation = &jumpRightAnimation;
 	/////////////////////////////////////////////////////////DEBUG
-	float velY = 2.0f;
+	float velY = 200.0f;
 
-	std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
+	//std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
 	float currentFloorHeigth = 0;
+	
+	jumpTime += dt.asSeconds();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround && jumpTime >= jumpRate)
 	{
-		/*movement.y -= gravity;
-		inAir += dt.asSeconds();
+		//movement.y -= gravity;
+		//inAir += dt.asSeconds();
+		std::cout << "jumpTime: " << jumpTime << std::endl;
+		jumpTime = 0.0f;
 
-		if (facingRight)
-			currentAnimation = &jumpRightAnimation;
-		else
-			currentAnimation = &jumpLeftAnimation;*/
-		velY = -2.0f;
+		onGround = false;
+		velY = -200.0f;
 		isJumping = true;
-		currentFloorHeigth = getPosition().y + 16;
+		//currentFloorHeigth = getPosition().y + 16;
+		noKeyWasPressed = false;
+		playerVelocity.y = -275;
+	}  
+	else
+	{
+		if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
+		{
+			playerVelocity.y += gravity;
+		}
+
+		else
+			playerVelocity.y = 0;
 	}
-	//else
-	//{
-	//	movement.y += gravity;
-	//	inAir = maxInAir;
-	//}
+	
 
 	if (isJumping)
 	{
-		if (getPosition().y <= currentFloorHeigth + 20)
-			velY = 2.0f;
+		if (facingRight)
+			currentAnimation = &jumpRightAnimation;
+		else
+			currentAnimation = &jumpLeftAnimation;
 	}
 		
-		
-	float yPosition = getPosition().y + velY + dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
-
+	float yPosition = getPosition().y + velY * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
 	float xPosition = getPosition().x + velX * dt.asSeconds();
-	setPosition(xPosition, yPosition);
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isJumping)
-	{
-		isJumping = true;
-		speed = jumpF / mass;
-	}
-
-	if (isJumping){
 	
-		Jump(dt.asSeconds());
-
-		if (onGround)
-			isJumping = false;
-	}
-*/
-
-
-//	movement.y += movement.y + gravity;
 
 	play(*currentAnimation);
-	//move(movement * dt.asSeconds());
+
+	move(playerVelocity * dt.asSeconds());
 
 	// if no key was pressed stop the animation
 	if (noKeyWasPressed)
@@ -191,12 +218,18 @@ void Player::Loop(sf::Time dt)
 		else
 			currentAnimation = &idleAnimationLeft;
 	}
+
 	noKeyWasPressed = true;
 
 	// update AnimatedSprite
 	update(dt);
 
 	HandleCollision();	
+
+	for (size_t i = 0; i < 10; i++)
+	{
+		bullets[i]->Update(dt);
+	}
 }
 
 void Player::GetLayers()
@@ -205,10 +238,16 @@ void Player::GetLayers()
 	{
 		for (auto layer = layers.begin(); layer != layers.end(); ++layer)
 		{
-			if (!(layer->name == "Coll"))
-				continue;
+			if (layer->name == "Collision")
+				 collisionObjects = layer->objects;
 
-			collisionObjects = layer->objects;
+			if (layer->name == "Player"){
+				for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
+				{
+					//setPosition(object->GetPosition());
+				}
+			}
+
 		}
 	}
 }
@@ -216,7 +255,7 @@ void Player::GetLayers()
 void Player::HandleCollision()
 {
 	sf::Rect<float> area;
-
+	onGround = false;
 	if (collisionObjects.size() > 0)
 	{
 		for (auto object = collisionObjects.begin(); object != collisionObjects.end(); ++object)
@@ -229,17 +268,19 @@ void Player::HandleCollision()
 					{
 						// Down side crash
 						onGround = true;
+						isJumping = false;
 						inAir = 0.f;
+						playerVelocity.y = 0;
 						setPosition({ getPosition().x, getPosition().y - area.height });
 						//std::cout << "Down side crash" << std::endl;
 					}
 					else
 					{
 						onGround = false;
-
+						playerVelocity.y = 0;
 						// Up side crash
 						setPosition({ getPosition().x, getPosition().y + area.height });
-						//std::cout << "Up side crash" << std::endl;
+						std::cout << "Up side crash" << std::endl;
 					}
 				}
 				else if (area.width < area.height)
@@ -267,4 +308,27 @@ void Player::Jump(float deltaTime)
 	speed -= 9.8 * deltaTime;
 
 	move(0, -speed);
+}
+
+void Player::Shoot()
+{
+	for (size_t i = 0; i < 10; i++)
+	{
+		if (bullets[i]->isActive())
+			continue;
+
+		bullets[i]->SetActive(true);
+		bullets[i]->SetInitialPosition(shootSpawn,facingRight);
+		break;
+	}
+}
+
+void Player::DrawBullets()
+{
+	//for (size_t i = 0; i < 10; i++)
+	//{
+	//	window->draw(bullets[i]->draw);
+
+	//}
+	
 }
