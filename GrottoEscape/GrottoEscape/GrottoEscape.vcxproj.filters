@@ -54,9 +54,6 @@
     <ClInclude Include="Player.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="interpolate.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -97,9 +94,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\Copy\sfml-tmxloader-master\src\pugixml\pugixml.cpp">
       <Filter>Archivos de código fuente\MapLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="interpolate.cpp">
-      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
