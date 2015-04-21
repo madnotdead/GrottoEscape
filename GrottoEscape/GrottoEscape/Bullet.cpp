@@ -36,9 +36,11 @@ Bullet::Bullet(std::vector<tmx::MapObject> _collisionObjects) :AnimatedSprite(sf
 
 	active = false;
 	bulletTime = 3.0f;
-	bulletSpeed = 90.0f;
+	bulletSpeed = 120.0f;
 
 	collisionObjects = _collisionObjects;
+
+	currentAnimation = &normalAnimation;
 }
 
 
@@ -61,32 +63,30 @@ void Bullet::Update(sf::Time dt)
 	}
 		
 	
+	if (!collided){
 
-	float xPosition;
+		float xPosition;
 
-	if (facingRigth)
-	{
-		currentAnimation = &normalAnimation;
-		xPosition = getPosition().x + bulletSpeed * dt.asSeconds();
-	}	
-	else
-	{
-		xPosition = getPosition().x - bulletSpeed * dt.asSeconds();
-		currentAnimation = &invAnimation;
+		if (facingRigth)
+		{
+			currentAnimation = &normalAnimation;
+			xPosition = getPosition().x + bulletSpeed * dt.asSeconds();
+		}
+		else
+		{
+			xPosition = getPosition().x - bulletSpeed * dt.asSeconds();
+			currentAnimation = &invAnimation;
+		}
+
+		setPosition(xPosition, getPosition().y);
 	}
-		
 
-	setPosition(xPosition, getPosition().y);
-
-	//currentAnimation = &normalAnimation;
 
 	play(*currentAnimation);
 
 	update(dt);
 
-	//if (collided)
-	//	SetActive(false);
-	//collided = CheckCollision();
+	collided = CheckCollision();
 }
 
 void Bullet::SetBulletSpeed(float speed)
@@ -112,13 +112,20 @@ void Bullet::SetInitialPosition(sf::Vector2f pos,bool direction)
 
 bool Bullet::CheckCollision()
 {
+	sf::FloatRect collisionRect;
+	collisionRect.height = getGlobalBounds().height - 4;
+	collisionRect.width = getGlobalBounds().width - 4;
+	collisionRect.left = getGlobalBounds().left;
+	collisionRect.top= getGlobalBounds().top - 2;
+
 	if (collisionObjects.size() > 0)
 	{
 		for (auto object = collisionObjects.begin(); object != collisionObjects.end(); ++object)
 		{
-			if (object->GetAABB().intersects(getGlobalBounds()))
+			if (object->GetAABB().intersects(collisionRect))
 			{
 				currentAnimation = &explotionAnimation;
+				bulletlifeTime += .3;
 				return true;
 			}
 				

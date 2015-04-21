@@ -57,7 +57,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	currentAnimation = &idleAnimationRight;
 
 	// set up AnimatedSprite
-	setPosition(sf::Vector2f(50,300));
+	setPosition(sf::Vector2f(400,300));
 
 	speed = 80.f;
 	noKeyWasPressed = true;
@@ -81,6 +81,13 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 
 Player::~Player()
 {
+	delete currentAnimation;
+
+	for (size_t i = 0; i < bullets.size(); i++)
+	{
+		delete bullets[i];
+	}
+
 }
 
 void Player::Loop(sf::Time dt)
@@ -140,7 +147,7 @@ void Player::Loop(sf::Time dt)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		setPosition(sf::Vector2f(50,275));
+		setPosition(sf::Vector2f(450, 300));
 
 
 	/////////////////////////////////////////////////////////DEBUG
@@ -183,10 +190,7 @@ void Player::Loop(sf::Time dt)
 	else
 	{
 		if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
-		{
 			playerVelocity.y += gravity;
-		}
-
 		else
 			playerVelocity.y = 0;
 	}

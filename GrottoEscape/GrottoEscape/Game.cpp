@@ -60,7 +60,7 @@ void Game::MainLoop()
 	sf::Clock frameClock;
 	sf::Time frameTime;
 	Player* mPlayer = new Player(wnd,ml.GetLayers());
-
+	Slime* mSlime = new Slime(ml.GetLayers());
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0, 800/2, 600/2));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
@@ -79,6 +79,7 @@ void Game::MainLoop()
 			timeSinceLastUpdate -= TimePerFrame;
 
 			mPlayer->Loop(TimePerFrame);
+			mSlime->Update(TimePerFrame);
 		}
 
 
@@ -105,6 +106,7 @@ void Game::MainLoop()
 		wnd->clear();
 		wnd->draw(ml);
 		wnd->draw(*mPlayer);
+		wnd->draw(*mSlime);
 		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 		{
 			if (mPlayer->bullets.at(i)->isActive())

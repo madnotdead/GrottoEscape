@@ -15,6 +15,7 @@
 #include "Game.h"
 #include <tmx\MapLoader.h>
 #include "Player.h"
+#include "Slime.h"
 
 #define GRAVITY = 500
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita
