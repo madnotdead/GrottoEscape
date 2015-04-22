@@ -2,7 +2,7 @@
 #include "Slime.h"
 
 
-Slime::Slime(std::vector<tmx::MapLayer> _layers) :AnimatedSprite(sf::seconds(0.2f), true, false)
+Slime::Slime(std::vector<tmx::MapLayer> _layers, std::string name) :AnimatedSprite(sf::seconds(0.2f), true, false)
 
 {
 	if (!normalTexture.loadFromFile("img/enemies.png"))
@@ -14,7 +14,7 @@ Slime::Slime(std::vector<tmx::MapLayer> _layers) :AnimatedSprite(sf::seconds(0.2
 		std::cout << "items.png loaded!" << std::endl;
 
 	//sf::Texture textureInverted;
-	if (!invertedTexture.loadFromFile("img/enemies.png"))
+	if (!invertedTexture.loadFromFile("img/enemies2.png"))
 	{
 		std::cout << "failed to load: enemies.png!" << std::endl;
 		//return 1;
@@ -36,7 +36,13 @@ Slime::Slime(std::vector<tmx::MapLayer> _layers) :AnimatedSprite(sf::seconds(0.2
 	layers = _layers;
 	speed = 50.0f;
 
+	this->name = name;
+
 	GetLayers();
+
+	setPosition(points.at(0));
+
+	SetActive(true);
 }
 
 
@@ -46,19 +52,26 @@ Slime::~Slime()
 
 void Slime::Update(sf::Time dt)
 {
+	if (!getActive())
+		return;
 
 	float xPosition;
 
 	if (facingRight)
 	{
+		currentPoint = points.at(1);
 		currentAnimation = &walkingRight;
 		xPosition = getPosition().x + speed * dt.asSeconds();
 	}
 	else
 	{
+		currentPoint = points.at(0);
 		xPosition = getPosition().x - speed * dt.asSeconds();
 		currentAnimation = &walkingLeft;
 	}
+
+	if (currentPoint.x ==  roundf(getPosition().x))
+		facingRight = !facingRight;
 
 	if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
 		playerVelocity.y += 20;
@@ -87,6 +100,12 @@ void Slime::HandleCollision()
 		{
 			if (object->GetAABB().intersects(getGlobalBounds(), area))
 			{
+				if (object->GetPropertyString("IsLava") == "true")
+				{
+					SetActive(false);
+					return;
+				}
+
 				if (area.width > area.height)
 				{
 					if (!area.contains({ area.left, getPosition().y }))
@@ -136,6 +155,27 @@ void Slime::GetLayers()
 		{
 			if (layer->name == "Collision")
 				collisionObjects = layer->objects;
+
+			if (layer->name == "Waypoints")
+			{
+				for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
+				{
+					if (object->GetName() == name)
+					{
+						points.push_back(object->GetPosition());
+					}
+				}
+			}
 		}
 	}
+}
+
+void Slime::SetActive(bool active)
+{
+	this->isActive = active;
+}
+
+bool Slime::getActive()
+{
+	return this->isActive;
 }

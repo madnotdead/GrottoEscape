@@ -92,139 +92,149 @@ Player::~Player()
 
 void Player::Loop(sf::Time dt)
 {
-	float maxInAir = 0.3f;
-	float gravity = 20;
-	// if a key was pressed set the correct animation and move correctly
-	sf::Vector2f movement(0.f, 0.f);
-	
-
-
-	float velX = 0.0f;
-	playerVelocity.x = 0;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (!isDead)
 	{
-		if (onGround)
-			currentAnimation = &walkingAnimationLeft;
+		float maxInAir = 0.3f;
+		float gravity = 20;
+		// if a key was pressed set the correct animation and move correctly
+		sf::Vector2f movement(0.f, 0.f);
 
-		movement.x -= speed;
-		velX = -80.0f;
-		noKeyWasPressed = false;
-		facingRight = false;
-		playerVelocity.x = -80;
-	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		if (onGround)
-		currentAnimation = &walkingAnimationRight;
 
-		movement.x = speed;
-		noKeyWasPressed = false;
-		facingRight = true;
-		velX = 80.0f;
-		playerVelocity.x = 80;
-	}
+		float velX = 0.0f;
+		playerVelocity.x = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			if (onGround)
+				currentAnimation = &walkingAnimationLeft;
 
-	if (facingRight)
-		shootSpawn = sf::Vector2f(getPosition().x + 8, getPosition().y);
-	else
-		shootSpawn = sf::Vector2f(getPosition().x - 8 , getPosition().y);
+			movement.x -= speed;
+			velX = -80.0f;
+			noKeyWasPressed = false;
+			facingRight = false;
+			playerVelocity.x = -80;
+		}
 
-	shootTime += dt.asSeconds();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			if (onGround)
+				currentAnimation = &walkingAnimationRight;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && shootTime > shootRate)
-	{
+			movement.x = speed;
+			noKeyWasPressed = false;
+			facingRight = true;
+			velX = 80.0f;
+			playerVelocity.x = 80;
+		}
+
 		if (facingRight)
-			currentAnimation = &shootRightAnimation;
+			shootSpawn = sf::Vector2f(getPosition().x + 8, getPosition().y);
 		else
-			currentAnimation = &shootLeftAnimation;
+			shootSpawn = sf::Vector2f(getPosition().x - 8, getPosition().y);
 
-		Shoot();
-		std::cout << "ShootSpawn: "<< shootSpawn.x << "," << shootSpawn.y << std::endl;
-		shootTime = 0.0f;
+		shootTime += dt.asSeconds();
 
-		noKeyWasPressed = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && shootTime > shootRate)
+		{
+			if (facingRight)
+				currentAnimation = &shootRightAnimation;
+			else
+				currentAnimation = &shootLeftAnimation;
+
+			Shoot();
+			std::cout << "ShootSpawn: " << shootSpawn.x << "," << shootSpawn.y << std::endl;
+			shootTime = 0.0f;
+
+			noKeyWasPressed = false;
+		}
+
+		
+			
+
+
+		/////////////////////////////////////////////////////////DEBUG
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+		//	currentAnimation = &deadAnimation;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+		//	currentAnimation = &shootLeftAnimation;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+		//	currentAnimation = &shootRightAnimation;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+		//	currentAnimation = &jumpLeftAnimation;
+
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
+		//	currentAnimation = &jumpRightAnimation;
+		/////////////////////////////////////////////////////////DEBUG
+		float velY = 200.0f;
+
+		//std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
+		float currentFloorHeigth = 0;
+
+		jumpTime += dt.asSeconds();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround && jumpTime >= jumpRate)
+		{
+			//movement.y -= gravity;
+			//inAir += dt.asSeconds();
+			//std::cout << "jumpTime: " << jumpTime << std::endl;
+			jumpTime = 0.0f;
+
+			onGround = false;
+			velY = -200.0f;
+			isJumping = true;
+			//currentFloorHeigth = getPosition().y + 16;
+			noKeyWasPressed = false;
+			playerVelocity.y = -275;
+		}
+		else
+		{
+			if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
+				playerVelocity.y += gravity;
+			else
+				playerVelocity.y = 0;
+		}
+
+
+		if (isJumping)
+		{
+			if (facingRight)
+				currentAnimation = &jumpRightAnimation;
+			else
+				currentAnimation = &jumpLeftAnimation;
+		}
+
+		float yPosition = getPosition().y + velY * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
+		float xPosition = getPosition().x + velX * dt.asSeconds();
+		
+		move(playerVelocity * dt.asSeconds());
+
+		// if no key was pressed stop the animation
+		if (noKeyWasPressed)
+		{
+			stop();
+
+			if (facingRight)
+				currentAnimation = &idleAnimationRight;
+			else
+				currentAnimation = &idleAnimationLeft;
+		}
+
+		noKeyWasPressed = true;
 	}
+	else
+		currentAnimation = &deadAnimation;
+	
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
 		setPosition(sf::Vector2f(450, 300));
-
-
-	/////////////////////////////////////////////////////////DEBUG
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-	//	currentAnimation = &deadAnimation;
-
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-	//	currentAnimation = &shootLeftAnimation;
-
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-	//	currentAnimation = &shootRightAnimation;
-
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-	//	currentAnimation = &jumpLeftAnimation;
-
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
-	//	currentAnimation = &jumpRightAnimation;
-	/////////////////////////////////////////////////////////DEBUG
-	float velY = 200.0f;
-
-	//std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
-	float currentFloorHeigth = 0;
-	
-	jumpTime += dt.asSeconds();
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround && jumpTime >= jumpRate)
-	{
-		//movement.y -= gravity;
-		//inAir += dt.asSeconds();
-		std::cout << "jumpTime: " << jumpTime << std::endl;
-		jumpTime = 0.0f;
-
-		onGround = false;
-		velY = -200.0f;
-		isJumping = true;
-		//currentFloorHeigth = getPosition().y + 16;
-		noKeyWasPressed = false;
-		playerVelocity.y = -275;
-	}  
-	else
-	{
-		if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
-			playerVelocity.y += gravity;
-		else
-			playerVelocity.y = 0;
+		isDead = false;
 	}
-	
-
-	if (isJumping)
-	{
-		if (facingRight)
-			currentAnimation = &jumpRightAnimation;
-		else
-			currentAnimation = &jumpLeftAnimation;
-	}
-		
-	float yPosition = getPosition().y + velY * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
-	float xPosition = getPosition().x + velX * dt.asSeconds();
-	
 
 	play(*currentAnimation);
-
-	move(playerVelocity * dt.asSeconds());
-
-	// if no key was pressed stop the animation
-	if (noKeyWasPressed)
-	{
-		stop();
-
-		if (facingRight)
-			currentAnimation = &idleAnimationRight;
-		else
-			currentAnimation = &idleAnimationLeft;
-	}
-
-	noKeyWasPressed = true;
-
 	// update AnimatedSprite
 	update(dt);
 
@@ -248,7 +258,8 @@ void Player::GetLayers()
 			if (layer->name == "Player"){
 				for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
 				{
-					//setPosition(object->GetPosition());
+					//std::cout << "PlayerObject position x: " << object->GetPosition().x << std::endl;
+					//std::cout << "PlayerObject position y: " << object->GetPosition().y << std::endl;
 				}
 			}
 
@@ -266,6 +277,9 @@ void Player::HandleCollision()
 		{			
 			if (object->GetAABB().intersects(getGlobalBounds(), area))
 			{
+				if (object->GetPropertyString("IsLava") == "true")
+					isDead = true;
+
 				if (area.width > area.height)
 				{
 					if (!area.contains({ area.left, getPosition().y }))
