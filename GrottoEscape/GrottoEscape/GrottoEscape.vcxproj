@@ -52,12 +52,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\SFML-2.1-windows-vc11-32bits\SFML-2.1\include;C:\Users\RedGlobal 8.1\Copy\sfml-tmxloader-master\include;C:\Users\RedGlobal 8.1\Documents\GrottoEscape\zlib128-dll\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SFML-2.1-windows-vc11-32bits\SFML-2.1\include;C:\Users\Leandro\Copy\sfml-tmxloader-master\include;C:\Users\Leandro\Documents\GrottoEscape\zlib128-dll\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\RedGlobal 8.1\Copy\sfml-tmxloader-master\lib;C:\Users\RedGlobal 8.1\Documents\GrottoEscape\zlib128-dll\lib;C:\SFML-2.1-windows-vc11-32bits\SFML-2.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Leandro\Copy\sfml-tmxloader-master\lib;C:\Users\Leandro\Documents\GrottoEscape\zlib128-dll\lib;C:\SFML-2.1-windows-vc11-32bits\SFML-2.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zdll.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -89,6 +89,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="interpolate.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="stdafx.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="interpolate.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="stdafx.cpp">

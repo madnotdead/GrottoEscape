@@ -55,7 +55,7 @@ private:
 	void Shoot();
 	float shootRate;
 	float shootTime;
-
+	bool isDead;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 };

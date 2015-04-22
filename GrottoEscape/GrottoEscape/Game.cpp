@@ -60,12 +60,13 @@ void Game::MainLoop()
 	sf::Clock frameClock;
 	sf::Time frameTime;
 	Player* mPlayer = new Player(wnd,ml.GetLayers());
-	Slime* mSlime = new Slime(ml.GetLayers());
+	Slime* mSlime1 = new Slime(ml.GetLayers(),"Slime1");
+	Slime* mSlime2 = new Slime(ml.GetLayers(), "Slime2");
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0, 800/2, 600/2));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	sf::Vector2f viewPosition(800 / 2, 600 / 2);
-	view.zoom(0.8f);
+	view.zoom(0.6f);
 
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
@@ -79,7 +80,8 @@ void Game::MainLoop()
 			timeSinceLastUpdate -= TimePerFrame;
 
 			mPlayer->Loop(TimePerFrame);
-			mSlime->Update(TimePerFrame);
+			mSlime1->Update(TimePerFrame);
+			mSlime2->Update(TimePerFrame);
 		}
 
 
@@ -101,17 +103,47 @@ void Game::MainLoop()
 		//	viewPosition.y = mPlayer->getPosition().y;
 		//}
 
-		view.setCenter(mPlayer->getPosition());
+		
+
+		view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 50);
 		wnd->setView(view);
 		wnd->clear();
 		wnd->draw(ml);
 		wnd->draw(*mPlayer);
-		wnd->draw(*mSlime);
+		
+		if (mSlime1->getActive())
+			wnd->draw(*mSlime1);
+
+		if (mSlime2->getActive())
+			wnd->draw(*mSlime2);
+
 		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 		{
 			if (mPlayer->bullets.at(i)->isActive())
 				wnd->draw(*mPlayer->bullets.at(i));
 		}
+
+		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
+		{
+			if (!mPlayer->bullets.at(i)->isActive())
+				continue;
+
+
+			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+			{
+				mSlime1->SetActive(false);
+				mPlayer->bullets.at(i)->SetActive(false);
+			}
+				
+
+			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+			{
+				mSlime2->SetActive(false);
+				mPlayer->bullets.at(i)->SetActive(false);
+			}
+				
+		}
+
 		wnd->display();
 
 		//float fps = getFPS(FPSClock.restart());
