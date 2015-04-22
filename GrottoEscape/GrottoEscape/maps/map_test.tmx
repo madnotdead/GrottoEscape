@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="20" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="21" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
   <image source="tiles.png" width="128" height="80"/>
  </tileset>
- <layer name="Tiles" width="80" height="20">
+ <layer name="Tiles" width="80" height="21">
   <data encoding="base64" compression="zlib">
-   eJzt1MsKwjAQheHUXhZeVqJY60bq+z+jLSYQQtLO1CnJwFl8tEgv8R/S0RgzAgAAAAAA/KkmGDIqucusmRxXvAuYM9eB0WBLE44S+9W2UYz0/9fcT0OfNdXCrPekrVOoN79veO51aDS3c3uIcv05QLnnJLDGp6CX9+w74Ty1Hr+d6xf2obbyG12Fut7sUfq7/Jm0Vuedt5Hfu8j8Us/NvRdis3/s1O/CQH2/9D7h7qlw7u6opd8XHM6m1g==
+   eJztldsOgjAMQIkIiXhJFDTeXgT//xuFZEuaphvd3BhKH04oMNh62kGXZVknCIIgCIIQiVaReh3/zJL9huivJftz8cH1lFtInVsqbE4g655KsSHi1wxy8WHl4MDmRLugqBj4+Jvi+5ArRxTc/H2duJC6/zh+5oz2Z6q1Dy1z3OBJ90SM3ojJreeu3L3RPd/ej7Fvjgp4rek5gXNTTJ2H9KbB/ih2CNvYWh23gdYaiid49xnEBxBfUJ1s3qA/7IfrCjqqR8ZSz1Do3EJ/m4c8C0UJ4oK4XqL6jf0zH6g+Jrj7AY9rGM/A2l8j+ds74DK/dhxyv3D3FK67Pv6Sv5SY1j/lXN/M/wGl47Nl
   </data>
  </layer>
  <objectgroup name="Collision">
-  <object x="0" y="304.5" width="511" height="16.5"/>
-  <object x="592" y="287.5" width="16" height="16.5"/>
-  <object x="609.667" y="255.5" width="333" height="65"/>
-  <object x="976.667" y="256" width="16" height="16.6667"/>
-  <object x="1023.67" y="255.667" width="16" height="15.6667"/>
-  <object x="1072.33" y="255.667" width="15.6667" height="16.3333"/>
-  <object x="544.333" y="287.667" width="15.6667" height="16"/>
-  <object x="575.667" y="272" width="15.6667" height="15"/>
-  <object x="1" y="1" width="493" height="237"/>
-  <object x="495" y="0" width="95" height="223"/>
-  <object x="592" y="0" width="127" height="207"/>
-  <object x="720" y="-1" width="255" height="193"/>
-  <object x="978" y="-1" width="174" height="175"/>
-  <object x="1153" y="-1" width="126" height="160"/>
-  <object x="1121" y="271" width="160" height="46"/>
-  <object x="1186" y="255" width="92" height="16"/>
-  <object x="1234" y="240" width="43" height="15"/>
-  <object x="1250" y="223" width="26" height="14"/>
+  <object x="0.375" y="304.062" width="511.375" height="14"/>
+  <object x="592.375" y="288.125" width="15.25" height="15.375"/>
+  <object x="608.105" y="256.062" width="335.75" height="64.25"/>
+  <object x="976.292" y="256.25" width="15.5" height="15.7917"/>
+  <object x="1024.3" y="256.042" width="15.375" height="15.7917"/>
+  <object x="1072.2" y="256.167" width="15.5417" height="15.8333"/>
+  <object x="544.208" y="288.042" width="15.2917" height="15.75"/>
+  <object x="575.917" y="272.125" width="15.6667" height="15.75"/>
+  <object x="1" y="1" width="495" height="239"/>
+  <object x="495" y="0" width="97.0625" height="224"/>
+  <object x="592" y="0" width="127.938" height="207.875"/>
+  <object x="720" y="-1" width="256" height="192.938"/>
+  <object x="978" y="-1" width="174" height="177"/>
+  <object x="1153" y="-1" width="126.688" height="160.938"/>
+  <object x="1120.06" y="272.062" width="160" height="46"/>
+  <object x="1167.95" y="256" width="111.653" height="16.0284"/>
+  <object x="1200" y="240" width="79.7273" height="15.9091"/>
+  <object x="1232" y="223.909" width="47.9091" height="15.9091"/>
+  <object x="0.125" y="240.062" width="15.6875" height="64.25"/>
+  <object x="512" y="312.312" width="95.75" height="7.375">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="945" y="281" width="174" height="31.5">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1264.04" y="159.958" width="15.875" height="63.9583"/>
+  <object x="16" y="288" width="31.9375" height="16"/>
  </objectgroup>
  <objectgroup name="Player" visible="0">
-  <object x="22.6667" y="292.667"/>
-  <object x="26.6667" y="-13.3333" width="1.33333"/>
+  <object x="56.5" y="295.5"/>
+  <object x="408" y="295.5"/>
+  <object x="769" y="245"/>
+  <object x="1194" y="246"/>
+ </objectgroup>
+ <objectgroup name="Waypoints">
+  <object name="Slime1" x="48.5" y="289.188" width="15" height="14.5"/>
+  <object name="Slime1" x="497" y="287.75" width="15" height="14.5"/>
+  <object name="Slime2" x="609" y="238.25" width="15" height="14.5"/>
+  <object name="Slime2" x="929" y="238.75" width="15" height="14.5"/>
  </objectgroup>
 </map>
