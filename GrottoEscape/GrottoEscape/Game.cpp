@@ -82,6 +82,34 @@ void Game::MainLoop()
 			mPlayer->Loop(TimePerFrame);
 			mSlime1->Update(TimePerFrame);
 			mSlime2->Update(TimePerFrame);
+
+
+			if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+				mPlayer->Hit();
+
+			if (mPlayer->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+				mPlayer->Hit();
+
+			for (size_t i = 0; i < mPlayer->bullets.size(); i++)
+			{
+				if (!mPlayer->bullets.at(i)->isActive())
+					continue;
+
+
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+				{
+					mSlime1->SetActive(false);
+					mPlayer->bullets.at(i)->SetActive(false);
+				}
+
+
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+				{
+					mSlime2->SetActive(false);
+					mPlayer->bullets.at(i)->SetActive(false);
+				}
+
+			}
 		}
 
 
@@ -117,37 +145,16 @@ void Game::MainLoop()
 		if (mSlime2->getActive())
 			wnd->draw(*mSlime2);
 
+
+
 		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 		{
 			if (mPlayer->bullets.at(i)->isActive())
 				wnd->draw(*mPlayer->bullets.at(i));
 		}
 
-		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
-		{
-			if (!mPlayer->bullets.at(i)->isActive())
-				continue;
-
-
-			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
-			{
-				mSlime1->SetActive(false);
-				mPlayer->bullets.at(i)->SetActive(false);
-			}
-				
-
-			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
-			{
-				mSlime2->SetActive(false);
-				mPlayer->bullets.at(i)->SetActive(false);
-			}
-				
-		}
+		
 
 		wnd->display();
-
-		//float fps = getFPS(FPSClock.restart());
-
-		//std::cout << getFPS(FPSClock.restart()) << std::endl;
 	}
 }
