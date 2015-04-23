@@ -234,6 +234,13 @@ void Player::Loop(sf::Time dt)
 		isDead = false;
 	}
 
+	if (timeFromLastHit > 0)
+	{
+		timeFromLastHit -= dt.asSeconds();
+		//this->currentAnimationsetAlpha(((int(timeFromLastHit * 100)) % 2) * 255);
+
+	}
+
 	play(*currentAnimation);
 	// update AnimatedSprite
 	update(dt);
@@ -349,4 +356,13 @@ void Player::DrawBullets()
 
 	//}
 	
+}
+
+void Player::Hit()
+{
+	if (timeFromLastHit <= 0)
+	{
+		timeFromLastHit = 3;
+		playerVelocity.y = -30;
+	}
 }

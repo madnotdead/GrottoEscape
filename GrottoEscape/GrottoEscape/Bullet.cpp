@@ -37,7 +37,7 @@ Bullet::Bullet(std::vector<tmx::MapObject> _collisionObjects) :AnimatedSprite(sf
 	active = false;
 	bulletTime = 3.0f;
 	bulletSpeed = 120.0f;
-
+	bulletlifeTime = 0;
 	collisionObjects = _collisionObjects;
 
 	currentAnimation = &normalAnimation;
@@ -58,6 +58,7 @@ void Bullet::Update(sf::Time dt)
 
 	if (bulletlifeTime > bulletTime)
 	{
+		std::cout << "bulletlifetime: " << bulletlifeTime << std::endl;
 		SetActive(false);
 		bulletlifeTime = 0;
 	}
@@ -113,10 +114,10 @@ void Bullet::SetInitialPosition(sf::Vector2f pos,bool direction)
 bool Bullet::CheckCollision()
 {
 	sf::FloatRect collisionRect;
-	collisionRect.height = getGlobalBounds().height - 4;
-	collisionRect.width = getGlobalBounds().width - 4;
-	collisionRect.left = getGlobalBounds().left;
-	collisionRect.top= getGlobalBounds().top - 2;
+	collisionRect.height = getGlobalBounds().height - 2;
+	collisionRect.width = getGlobalBounds().width - 2;
+	collisionRect.left = getGlobalBounds().left +2;
+	collisionRect.top= getGlobalBounds().top + 2;
 
 	if (collisionObjects.size() > 0)
 	{

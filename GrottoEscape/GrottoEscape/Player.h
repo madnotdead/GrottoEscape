@@ -13,6 +13,7 @@ public:
 	void Jump(float deltaTime);
 	void DrawBullets();
 	std::vector<Bullet*> bullets;
+	void Hit();
 private:
 	Animation walkingAnimationUp;
 	Animation walkingAnimationRight;
@@ -56,6 +57,7 @@ private:
 	float shootRate;
 	float shootTime;
 	bool isDead;
+	float timeFromLastHit;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 };

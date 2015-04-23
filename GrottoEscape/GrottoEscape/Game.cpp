@@ -85,7 +85,6 @@ void Game::MainLoop()
 		}
 
 
-	
 		//if (mPlayer->getPosition().x > 50 ){
 			//viewPosition.x = mPlayer->getPosition().x + 100;
 			//viewPosition.y = mPlayer->getPosition().y - 50;
@@ -122,27 +121,31 @@ void Game::MainLoop()
 			if (mPlayer->bullets.at(i)->isActive())
 				wnd->draw(*mPlayer->bullets.at(i));
 		}
-
+		
 		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 		{
 			if (!mPlayer->bullets.at(i)->isActive())
 				continue;
 
-
-			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getAdjustedGlobalBounds()) && mSlime1->getActive())
 			{
 				mSlime1->SetActive(false);
 				mPlayer->bullets.at(i)->SetActive(false);
-			}
-				
+			}			
 
-			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getAdjustedGlobalBounds()) && mSlime2->getActive())
 			{
 				mSlime2->SetActive(false);
 				mPlayer->bullets.at(i)->SetActive(false);
 			}
 				
 		}
+
+		//if (mSlime1->getActive() && mSlime2->getActive()){
+		//	if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) || mPlayer->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+		//		mPlayer->Hit();
+		//}
+		
 
 		wnd->display();
 

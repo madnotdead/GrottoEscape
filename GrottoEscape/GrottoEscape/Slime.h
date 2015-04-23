@@ -28,5 +28,6 @@ public:
 	std::vector<tmx::MapObject> collisionObjects;
 	void SetActive(bool active);
 	bool getActive();
+	sf::FloatRect getAdjustedGlobalBounds();
 };
 
