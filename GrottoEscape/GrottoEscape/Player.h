@@ -57,7 +57,7 @@ private:
 	float shootRate;
 	float shootTime;
 	bool isDead;
-	float timeFromLastHit;
+	bool hited;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 };

@@ -210,10 +210,11 @@ void Player::Loop(sf::Time dt)
 		float xPosition = getPosition().x + velX * dt.asSeconds();
 		
 		move(playerVelocity * dt.asSeconds());
-
+		
 		// if no key was pressed stop the animation
 		if (noKeyWasPressed)
 		{
+			///playerVelocity.x = 0;
 			stop();
 
 			if (facingRight)
@@ -360,9 +361,8 @@ void Player::DrawBullets()
 
 void Player::Hit()
 {
-	if (timeFromLastHit <= 0)
-	{
-		timeFromLastHit = 3;
-		playerVelocity.y = -30;
-	}
+	hited = true;
+
+	//std::cout << "playerVelocity.x: " << playerVelocity.x << std::endl;
+
 }
