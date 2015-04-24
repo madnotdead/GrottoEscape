@@ -235,11 +235,9 @@ void Player::Loop(sf::Time dt)
 		isDead = false;
 	}
 
-	if (timeFromLastHit > 0)
+	if (timeSinceLastHit > 0)
 	{
-		timeFromLastHit -= dt.asSeconds();
-		//this->currentAnimationsetAlpha(((int(timeFromLastHit * 100)) % 2) * 255);
-
+		timeSinceLastHit -= dt.asSeconds();
 	}
 
 	play(*currentAnimation);
@@ -361,7 +359,13 @@ void Player::DrawBullets()
 
 void Player::Hit()
 {
-	hited = true;
+
+	if (timeSinceLastHit <= 0)
+	{
+		timeSinceLastHit = 2;
+		playerVelocity.y = -300;
+	}
+	//hited = true;
 
 	//std::cout << "playerVelocity.x: " << playerVelocity.x << std::endl;
 
