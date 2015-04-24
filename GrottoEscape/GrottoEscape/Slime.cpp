@@ -179,3 +179,8 @@ bool Slime::getActive()
 {
 	return this->isActive;
 }
+
+sf::FloatRect Slime::getAdjustedGlobalBounds()
+{
+	return sf::FloatRect(getGlobalBounds().left + 4, getGlobalBounds().top + 4, getGlobalBounds().width - 4, getGlobalBounds().height - 4);
+}

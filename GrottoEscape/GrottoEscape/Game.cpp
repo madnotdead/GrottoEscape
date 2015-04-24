@@ -113,7 +113,6 @@ void Game::MainLoop()
 		}
 
 
-	
 		//if (mPlayer->getPosition().x > 50 ){
 			//viewPosition.x = mPlayer->getPosition().x + 100;
 			//viewPosition.y = mPlayer->getPosition().y - 50;
