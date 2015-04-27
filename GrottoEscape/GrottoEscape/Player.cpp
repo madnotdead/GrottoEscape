@@ -57,7 +57,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	currentAnimation = &idleAnimationRight;
 
 	// set up AnimatedSprite
-	setPosition(sf::Vector2f(400,300));
+//	setPosition(sf::Vector2f(400,300));
 
 	speed = 80.f;
 	noKeyWasPressed = true;
@@ -67,6 +67,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	playerVelocity = sf::Vector2f(0, 0);
 	GetLayers();
 
+	
 	jumpF = 400;
 	mass = 75;
 
@@ -76,6 +77,37 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	{
 		bullets.push_back(new Bullet(collisionObjects));
 	}
+
+	jumpBuffer = new sf::SoundBuffer;
+	if (!jumpBuffer->loadFromFile("audio/jump.wav"))
+	{
+		delete jumpBuffer;
+		jumpBuffer = 0;
+	}
+
+	jumpSound = new sf::Sound(*jumpBuffer);
+	jumpSound->setVolume(50.0f);
+
+
+	shootBuffer= new sf::SoundBuffer;
+	if (!shootBuffer->loadFromFile("audio/laser.wav"))
+	{
+		delete shootBuffer;
+		shootBuffer = 0;
+	}
+
+	shootSound = new sf::Sound(*shootBuffer);
+	shootSound->setVolume(50.0f);
+
+	pickUpBuffer= new sf::SoundBuffer;
+	if (!pickUpBuffer->loadFromFile("audio/pickup.wav"))
+	{
+		delete pickUpBuffer;
+		pickUpBuffer = 0;
+	}
+
+	pickUpSound = new sf::Sound(*pickUpBuffer);
+	pickUpSound->setVolume(50.0f);
 }
 
 
@@ -119,7 +151,7 @@ void Player::Loop(sf::Time dt)
 		{
 			if (onGround)
 				currentAnimation = &walkingAnimationRight;
-
+			
 			movement.x = speed;
 			noKeyWasPressed = false;
 			facingRight = true;
@@ -142,6 +174,7 @@ void Player::Loop(sf::Time dt)
 				currentAnimation = &shootLeftAnimation;
 
 			Shoot();
+			shootSound->play();
 			std::cout << "ShootSpawn: " << shootSpawn.x << "," << shootSpawn.y << std::endl;
 			shootTime = 0.0f;
 
@@ -188,6 +221,7 @@ void Player::Loop(sf::Time dt)
 			//currentFloorHeigth = getPosition().y + 16;
 			noKeyWasPressed = false;
 			playerVelocity.y = -275;
+			jumpSound->play();
 		}
 		else
 		{
@@ -231,7 +265,7 @@ void Player::Loop(sf::Time dt)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
-		setPosition(sf::Vector2f(450, 300));
+		setPosition(initialPosition);
 		isDead = false;
 	}
 
@@ -264,8 +298,8 @@ void Player::GetLayers()
 			if (layer->name == "Player"){
 				for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
 				{
-					//std::cout << "PlayerObject position x: " << object->GetPosition().x << std::endl;
-					//std::cout << "PlayerObject position y: " << object->GetPosition().y << std::endl;
+					initialPosition = object->GetPosition();
+					setPosition(initialPosition);
 				}
 			}
 

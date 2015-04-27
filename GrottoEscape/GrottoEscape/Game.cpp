@@ -70,6 +70,25 @@ void Game::MainLoop()
 
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
+
+	sf::SoundBuffer *mainThemeBuffer;
+
+	mainThemeBuffer = new sf::SoundBuffer();
+
+	if (!mainThemeBuffer->loadFromFile("audio/main.wav"))
+	{
+		std::cout << "Failed to load mainTheme.wav" << std::endl;
+		delete mainThemeBuffer;
+		mainThemeBuffer = 0;
+	}
+
+	sf::Sound *main = new sf::Sound(*mainThemeBuffer);
+	main->setLoop(true);
+	main->setVolume(100.0f);
+	main->play();
+
+
+	GenerateItems(ml.GetLayers());
 	while(wnd->isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
@@ -83,11 +102,11 @@ void Game::MainLoop()
 			mSlime1->Update(TimePerFrame);
 			mSlime2->Update(TimePerFrame);
 
-
-			if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+			
+			if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) && mSlime1->getActive())
 				mPlayer->Hit();
 
-			if (mPlayer->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+			if (mPlayer->getGlobalBounds().intersects(mSlime2->getGlobalBounds()) && mSlime2->getActive())
 				mPlayer->Hit();
 
 			for (size_t i = 0; i < mPlayer->bullets.size(); i++)
@@ -109,6 +128,11 @@ void Game::MainLoop()
 					mPlayer->bullets.at(i)->SetActive(false);
 				}
 
+			}
+
+			for (size_t i = 0; i < items.size(); i++)
+			{
+				items.at(i)->Update(TimePerFrame);
 			}
 		}
 
@@ -152,8 +176,46 @@ void Game::MainLoop()
 				wnd->draw(*mPlayer->bullets.at(i));
 		}
 
-		
+		for (size_t i = 0; i < items.size(); i++)
+		{
+			wnd->draw(*items.at(i));
+		}
 
 		wnd->display();
 	}
+}
+
+
+void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
+{
+	int itemType;
+	if (layers.size() <= 0)
+		return;
+
+	for (auto layer = layers.begin(); layer != layers.end(); ++layer)
+	{
+		for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
+		{
+			if (layer->name == "Items")
+			{
+				if (!object->Visible())
+					continue;
+
+				itemType = atoi(object->GetPropertyString("ItemType").c_str());
+
+				items.push_back(new Item(object->GetPosition(),(ItemType)itemType));
+			}
+
+			if (layer->name == "Enemies")
+			{
+				//int
+			}
+
+			if (layer->name == "Player")
+			{
+
+			}
+		}
+	}
+	
 }

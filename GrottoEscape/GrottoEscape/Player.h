@@ -1,6 +1,8 @@
 #pragma once
 #include "AnimatedSprite.h"
 #include "Bullet.h"
+#include "stdafx.h"
+#include <SFML\Audio.hpp>
 class Player :
 	public AnimatedSprite
 {
@@ -59,7 +61,14 @@ private:
 	bool isDead;
 	bool hited;
 	float timeSinceLastHit;
+	sf::SoundBuffer *shootBuffer;
+	sf::Sound *shootSound;
+	sf::SoundBuffer *jumpBuffer;
+	sf::Sound *jumpSound;
+	sf::SoundBuffer *pickUpBuffer;
+	sf::Sound *pickUpSound;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
+	sf::Vector2f initialPosition;
 };
 

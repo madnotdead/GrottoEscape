@@ -16,6 +16,11 @@
 #include <tmx\MapLoader.h>
 #include "Player.h"
 #include "Slime.h"
-
+#include <SFML\Audio.hpp>
+#include <SFML\Audio\Music.hpp>
+#include "SoundManager.h"
+#include "Item.h"
 #define GRAVITY = 500
+
+
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita

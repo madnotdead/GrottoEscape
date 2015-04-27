@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Tiles" width="80" height="21">
   <data encoding="base64" compression="zlib">
-   eJztldsOgjAMQIkIiXhJFDTeXgT//xuFZEuaphvd3BhKH04oMNh62kGXZVknCIIgCIIQiVaReh3/zJL9huivJftz8cH1lFtInVsqbE4g655KsSHi1wxy8WHl4MDmRLugqBj4+Jvi+5ArRxTc/H2duJC6/zh+5oz2Z6q1Dy1z3OBJ90SM3ojJreeu3L3RPd/ej7Fvjgp4rek5gXNTTJ2H9KbB/ih2CNvYWh23gdYaiid49xnEBxBfUJ1s3qA/7IfrCjqqR8ZSz1Do3EJ/m4c8C0UJ4oK4XqL6jf0zH6g+Jrj7AY9rGM/A2l8j+ds74DK/dhxyv3D3FK67Pv6Sv5SY1j/lXN/M/wGl47Nl
+   eJztlm0PgiAQgF2mW/ayldZK/ZL2/39jssF2u51wIKgZH55xCir3cKh9kiR9JBKJ/DndCubwy3TRoTeHW/Q4d15bdBhz1uc+Nf9/9mfjg+sp1bB0bkuhcwLZDxSSAxG/V5CLCztEilqqTwGdKBcUBQMXf3O8HygPtvm7OrFh6frj+Fkzyh+sdc4e0NWHrg+OEZ5UTYSojZC8Bmrp7oP6XGs/xL65SuC5auAGjsdi6tinNwX2R3FC6MaWsj16mGtDUDNiPF7QgnvfQXwB8QOtk84b9If9cF1BR6VhLHUNhcrN97tZ5JlJchBnxPkcOBOYvpkNWp8xuPsBj6sY18C1fyJ/nH9gU47C39kCm/VTjuuZaYl1V+3U+sM+Q/ozPZvb5/KMsfn7mCvGxh/3nl8DHLM/
   </data>
  </layer>
  <objectgroup name="Collision">
@@ -41,16 +41,40 @@
   <object x="1264.04" y="159.958" width="15.875" height="63.9583"/>
   <object x="16" y="288" width="31.9375" height="16"/>
  </objectgroup>
- <objectgroup name="Player" visible="0">
-  <object x="56.5" y="295.5"/>
-  <object x="408" y="295.5"/>
-  <object x="769" y="245"/>
-  <object x="1194" y="246"/>
+ <objectgroup name="Player">
+  <object x="18.3636" y="272.318" width="9.45455" height="9.45455"/>
  </objectgroup>
  <objectgroup name="Waypoints">
   <object name="Slime1" x="48.5" y="289.188" width="15" height="14.5"/>
   <object name="Slime1" x="497" y="287.75" width="15" height="14.5"/>
   <object name="Slime2" x="609" y="238.25" width="15" height="14.5"/>
   <object name="Slime2" x="929" y="238.75" width="15" height="14.5"/>
+ </objectgroup>
+ <objectgroup name="Items">
+  <object x="199.333" y="271.333" width="28" height="21.3333" visible="0">
+   <properties>
+    <property name="ItemType" value="1"/>
+   </properties>
+  </object>
+  <object x="380" y="270" width="28" height="21.3333">
+   <properties>
+    <property name="ItemType" value="0"/>
+   </properties>
+  </object>
+  <object x="659.333" y="232.667" width="28" height="21.3333" visible="0">
+   <properties>
+    <property name="ItemType" value="2"/>
+   </properties>
+  </object>
+  <object x="1129.33" y="242.667" width="28" height="21.3333" visible="0">
+   <properties>
+    <property name="ItemType" value="3"/>
+   </properties>
+  </object>
+  <object x="1244.67" y="208" width="9.33333" height="8.66667">
+   <properties>
+    <property name="ItemType" value="4"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
