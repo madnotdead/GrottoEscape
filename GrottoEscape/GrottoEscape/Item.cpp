@@ -2,19 +2,19 @@
 #include "Item.h"
 
 
-Item::Item(sf::Vector2f position, ItemType type)
+Item::Item(sf::Vector2f _position, ItemType _type)
 {
-	setPosition(position);
+	setPosition(_position);
 
 	if (!texture.loadFromFile("img/items.png"))
 	{
 		std::cout << "Failed to load player spritesheet: player_2.png!" << std::endl;
 		//return 1;
 	}
-
+	active = true;
 	currentAnimation = new Animation();
 	currentAnimation->setSpriteSheet(texture);
-
+	type = _type;
 	switch (type)
 	{
 	case POWER_UP:
@@ -61,7 +61,16 @@ bool Item::IsActive()
 
 void Item::Update(sf::Time dt)
 {
+
+	if (!IsActive())
+		return;
+
 	play(*currentAnimation);
 
 	update(dt);
+}
+
+ItemType Item::GetType()
+{
+	return type;
 }

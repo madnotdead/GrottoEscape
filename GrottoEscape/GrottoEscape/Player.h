@@ -16,6 +16,7 @@ public:
 	void DrawBullets();
 	std::vector<Bullet*> bullets;
 	void Hit();
+	void HandleItemCollision(ItemType type);
 private:
 	Animation walkingAnimationUp;
 	Animation walkingAnimationRight;
@@ -70,5 +71,8 @@ private:
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 	sf::Vector2f initialPosition;
+	int lifes;
+	int doubleJump;
+	int runs;
 };
 

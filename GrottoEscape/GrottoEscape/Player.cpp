@@ -404,3 +404,27 @@ void Player::Hit()
 	//std::cout << "playerVelocity.x: " << playerVelocity.x << std::endl;
 
 }
+
+void Player::HandleItemCollision(ItemType type)
+{
+	switch (type)
+	{
+	case POWER_UP:
+		std::cout << "Power up item collected." << std::endl;
+		break;
+	case OBJECTIVE:
+		std::cout << "Objective collected." << std::endl;
+		break;
+	case SPAWN:
+		std::cout << "Spawn item collected." << std::endl;
+		break;
+	case COLLECTABLE:
+		std::cout << "collectable item collected." << std::endl;
+		break;
+	case FINAL:
+		std::cout << "Final item collected." << std::endl;
+		break;
+	default:
+		break;
+	}
+}
