@@ -71,8 +71,8 @@ void Game::MainLoop()
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
 
-	sf::SoundBuffer *mainThemeBuffer;
 
+	sf::SoundBuffer *mainThemeBuffer;
 	mainThemeBuffer = new sf::SoundBuffer();
 
 	if (!mainThemeBuffer->loadFromFile("audio/main.wav"))
@@ -85,10 +85,10 @@ void Game::MainLoop()
 	sf::Sound *main = new sf::Sound(*mainThemeBuffer);
 	main->setLoop(true);
 	main->setVolume(100.0f);
-	main->play();
-
+	//main->play();
 
 	GenerateItems(ml.GetLayers());
+
 	while(wnd->isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
@@ -101,7 +101,23 @@ void Game::MainLoop()
 			mPlayer->Loop(TimePerFrame);
 			mSlime1->Update(TimePerFrame);
 			mSlime2->Update(TimePerFrame);
+			
+			for (size_t i = 0; i < items.size(); i++)
+			{
+				items.at(i)->Update(TimePerFrame);
+			}
 
+			for (size_t i = 0; i < items.size(); i++)
+			{
+				if (mPlayer->getGlobalBounds().intersects(items.at(i)->getGlobalBounds()))
+				{
+					if (!items.at(i)->IsActive())
+						continue;
+
+					mPlayer->HandleItemCollision(items.at(i)->GetType());
+					items.at(i)->SetActive(false);
+				}
+			}
 			
 			if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) && mSlime1->getActive())
 				mPlayer->Hit();
@@ -130,10 +146,7 @@ void Game::MainLoop()
 
 			}
 
-			for (size_t i = 0; i < items.size(); i++)
-			{
-				items.at(i)->Update(TimePerFrame);
-			}
+			
 		}
 
 
@@ -178,7 +191,8 @@ void Game::MainLoop()
 
 		for (size_t i = 0; i < items.size(); i++)
 		{
-			wnd->draw(*items.at(i));
+			if (items.at(i)->IsActive())
+				wnd->draw(*items.at(i));
 		}
 
 		wnd->display();

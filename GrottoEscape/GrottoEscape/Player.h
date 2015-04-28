@@ -18,10 +18,9 @@ public:
 	void Hit();
 	void HandleItemCollision(ItemType type);
 private:
-	Animation walkingAnimationUp;
+	Animation succededAnimation;
 	Animation walkingAnimationRight;
 	Animation walkingAnimationLeft;
-	Animation walkingAnimationDown;
 	Animation idleAnimationLeft;
 	Animation idleAnimationRight;
 	Animation jumpLeftAnimation;

@@ -407,6 +407,8 @@ void Player::Hit()
 
 void Player::HandleItemCollision(ItemType type)
 {
+	pickUpSound->play();
+
 	switch (type)
 	{
 	case POWER_UP:

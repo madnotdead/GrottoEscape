@@ -19,6 +19,7 @@ private:
 	sf::Texture texture;
 	bool active;
 	ItemType type;
+	int offSet;
 public:
 	Item(sf::Vector2f position, ItemType type);
 	~Item();
@@ -26,5 +27,6 @@ public:
 	void SetActive(bool active);
 	void Update(sf::Time dt);
 	ItemType GetType();
+	sf::FloatRect getAdjustedGlobalBounds();
 };
 
