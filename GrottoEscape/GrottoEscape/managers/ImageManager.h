@@ -7,7 +7,7 @@
 
 #include "ResourceManager.h"
 
-namespace Game
+namespace Manager
 {
 	class ImageManager : public ResourceManager<sf::Texture> 
 	{

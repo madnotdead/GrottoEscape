@@ -3,7 +3,7 @@
 
 #include "ImageManager.h"
 
-namespace Game
+namespace Manager
 {
 	sf::Texture* ImageManager::load(const std::string& strId) 
 	{
