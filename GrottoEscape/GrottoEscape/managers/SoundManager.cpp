@@ -9,7 +9,7 @@ namespace Game
 	sf::SoundBuffer* SoundManager::load(const std::string& strId) 
 	{
 		sf::SoundBuffer *soundBuffer = new sf::SoundBuffer;
-		if(!soundBuffer->LoadFromFile(strId)) 
+		if(!soundBuffer->loadFromFile(strId)) 
 		{
 			delete soundBuffer;
 			soundBuffer = 0;

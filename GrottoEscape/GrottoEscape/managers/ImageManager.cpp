@@ -8,7 +8,7 @@ namespace Game
 	sf::Texture* ImageManager::load(const std::string& strId) 
 	{
 		sf::Texture *image = new sf::Texture;
-		if(!image->LoadFromFile(strId)) 
+		if(!image->loadFromFile(strId)) 
 		{
 			delete image;
 			image = 0;
