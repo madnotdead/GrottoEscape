@@ -90,6 +90,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="interpolate.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="managers\ImageManager.h" />
+    <ClInclude Include="managers\ResourceManager.h" />
+    <ClInclude Include="managers\SoundManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="stdafx.h" />
@@ -132,6 +135,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="managers\ImageManager.cpp" />
+    <ClCompile Include="managers\SoundManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="stdafx.cpp">
