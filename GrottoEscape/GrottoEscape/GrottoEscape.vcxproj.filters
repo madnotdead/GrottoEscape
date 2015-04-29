@@ -25,6 +25,9 @@
     <Filter Include="Archivos de código fuente\AnimatedSprite">
       <UniqueIdentifier>{89f39c79-bf08-4f66-909c-5dde4e8c24e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de código fuente\Managers">
+      <UniqueIdentifier>{711158fe-a9c7-4687-a341-2c7315f2f6e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -64,6 +67,30 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\ImageManager.h">
+      <Filter>Archivos de código fuente\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\ResourceManager.h">
+      <Filter>Archivos de código fuente\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="managers\SoundManager.h">
+      <Filter>Archivos de código fuente\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\CollisionDetection.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\FPSCalculator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\Timer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\TimerManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\Types.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -117,6 +144,18 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\ImageManager.cpp">
+      <Filter>Archivos de código fuente\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="managers\SoundManager.cpp">
+      <Filter>Archivos de código fuente\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\CollisionDetection.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\FPSCalculator.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

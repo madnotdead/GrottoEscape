@@ -6,7 +6,7 @@
 #include <SFML\Graphics.hpp>
 #include <map>
 #include "CollisionDetection.h"
-namespace Collision
+namespace CollisionDetection
 {
 	class BitmaskManager
 	{
@@ -88,6 +88,7 @@ namespace Collision
 		}
 		return false;
 	}
+
 
 	bool CreateTextureAndBitmask(sf::Texture &LoadInto, const std::string& Filename)
 	{

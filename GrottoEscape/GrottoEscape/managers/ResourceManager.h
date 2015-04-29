@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-namespace Game
+namespace GameManager
 {
 	template< class T >
 	class ResourceManager 

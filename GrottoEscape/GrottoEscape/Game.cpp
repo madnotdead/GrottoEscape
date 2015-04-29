@@ -109,13 +109,13 @@ void Game::MainLoop()
 
 			for (size_t i = 0; i < items.size(); i++)
 			{
+				//if (CollisionDetection::PixelPerfectTest(mPlayer, items.at(i))
 				if (mPlayer->getGlobalBounds().intersects(items.at(i)->getGlobalBounds()))
 				{
 					if (!items.at(i)->IsActive())
 						continue;
 
-					mPlayer->HandleItemCollision(items.at(i)->GetType());
-					items.at(i)->SetActive(false);
+					mPlayer->HandleItemCollision(items.at(i));
 				}
 			}
 			
@@ -222,12 +222,17 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 
 			if (layer->name == "Enemies")
 			{
-				//int
+				//Create Player
 			}
 
 			if (layer->name == "Player")
 			{
+				//Create Enemies
+			}
 
+			if (layer->name == "Waypoints")
+			{
+				//Asigno los waypoints a los enemigos
 			}
 		}
 	}

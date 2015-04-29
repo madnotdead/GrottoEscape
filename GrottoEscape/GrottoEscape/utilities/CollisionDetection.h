@@ -33,8 +33,8 @@ source distribution.
 * Created on 30 January 2009, 11:02
 */
 
-#ifndef COLLISION_H
-#define COLLISION_H
+#ifndef COLLISIONDETECTION_H
+#define COLLISIONDETECTION_H
 namespace CollisionDetection {
 	//////
 	/// Test for a collision between two sprites by comparing the alpha values of overlapping pixels

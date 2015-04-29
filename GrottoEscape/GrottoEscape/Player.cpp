@@ -405,11 +405,11 @@ void Player::Hit()
 
 }
 
-void Player::HandleItemCollision(ItemType type)
+void Player::HandleItemCollision(Item *mItem)
 {
 	pickUpSound->play();
-
-	switch (type)
+	bool final = false;
+	switch (mItem->GetType())
 	{
 	case POWER_UP:
 		std::cout << "Power up item collected." << std::endl;
@@ -425,8 +425,12 @@ void Player::HandleItemCollision(ItemType type)
 		break;
 	case FINAL:
 		std::cout << "Final item collected." << std::endl;
+		final = true;
 		break;
 	default:
 		break;
 	}
+
+	if (!final)
+		mItem->SetActive(false);
 }

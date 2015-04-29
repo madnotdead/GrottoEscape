@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Item.h"
 
-
 Item::Item(sf::Vector2f _position, ItemType _type)
 {
 	setPosition(_position);
 
-	if (!texture.loadFromFile("img/items.png"))
+	//CollisionDetection::CreateTextureAndBitmask(texture, "img/items.png")
+	
+	if (!CollisionDetection::CreateTextureAndBitmask(texture, "img/items.png"))
 	{
 		std::cout << "Failed to load player spritesheet: player_2.png!" << std::endl;
 		//return 1;

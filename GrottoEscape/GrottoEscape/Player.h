@@ -16,7 +16,7 @@ public:
 	void DrawBullets();
 	std::vector<Bullet*> bullets;
 	void Hit();
-	void HandleItemCollision(ItemType type);
+	void HandleItemCollision(Item *mItem);
 private:
 	Animation succededAnimation;
 	Animation walkingAnimationRight;
