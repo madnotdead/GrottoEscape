@@ -4,7 +4,7 @@
 
 #include "../utilities/Types.h"
 
-namespace Game
+namespace Manager
 {
 	sf::SoundBuffer* SoundManager::load(const std::string& strId) 
 	{

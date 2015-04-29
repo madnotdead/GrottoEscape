@@ -131,14 +131,14 @@ void Game::MainLoop()
 					continue;
 
 
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()))
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) &&  mSlime1->getActive())
 				{
 					mSlime1->SetActive(false);
 					mPlayer->bullets.at(i)->SetActive(false);
 				}
 
 
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()))
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()) && mSlime2->getActive())
 				{
 					mSlime2->SetActive(false);
 					mPlayer->bullets.at(i)->SetActive(false);
