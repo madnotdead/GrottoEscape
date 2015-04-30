@@ -22,5 +22,8 @@
 #include "Item.h"
 #define GRAVITY = 500
 #include "utilities\CollisionDetection.h"
+#include "managers\ImageManager.h"
+#include "managers\SoundManager.h"
+#include "GameManager.h"
 
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita

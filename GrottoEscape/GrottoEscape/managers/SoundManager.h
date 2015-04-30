@@ -7,7 +7,7 @@
 
 #include "ResourceManager.h"
 
-namespace Game
+namespace Manager
 {
 	class SoundManager : public ResourceManager<sf::SoundBuffer> 
 	{
