@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Item.h"
 
-
 Item::Item(sf::Vector2f _position, ItemType _type)
 {
 	setPosition(_position);
@@ -33,8 +32,7 @@ Item::Item(sf::Vector2f _position, ItemType _type)
 		currentAnimation->addFrame(sf::IntRect(48, 16, 16, 16));
 		break;
 	case FINAL:
-		currentAnimation->addFrame(sf::IntRect(0
-			, 0, 16, 16));
+		currentAnimation->addFrame(sf::IntRect(0, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(16, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(32, 0, 16, 16));
 
