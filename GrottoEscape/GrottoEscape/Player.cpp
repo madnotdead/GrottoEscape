@@ -407,7 +407,7 @@ void Player::Hit()
 
 void Player::HandleItemCollision(Item *mItem)
 {
-	pickUpSound->play();
+
 	bool final = false;
 	switch (mItem->GetType())
 	{
@@ -432,5 +432,9 @@ void Player::HandleItemCollision(Item *mItem)
 	}
 
 	if (!final)
+	{
 		mItem->SetActive(false);
+		pickUpSound->play();
+	}
+		
 }

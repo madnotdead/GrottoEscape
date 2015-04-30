@@ -5,9 +5,7 @@ Item::Item(sf::Vector2f _position, ItemType _type)
 {
 	setPosition(_position);
 
-	//CollisionDetection::CreateTextureAndBitmask(texture, "img/items.png")
-	
-	if (!CollisionDetection::CreateTextureAndBitmask(texture, "img/items.png"))
+	if (!texture.loadFromFile("img/items.png"))
 	{
 		std::cout << "Failed to load player spritesheet: player_2.png!" << std::endl;
 		//return 1;
@@ -34,8 +32,7 @@ Item::Item(sf::Vector2f _position, ItemType _type)
 		currentAnimation->addFrame(sf::IntRect(48, 16, 16, 16));
 		break;
 	case FINAL:
-		currentAnimation->addFrame(sf::IntRect(0
-			, 0, 16, 16));
+		currentAnimation->addFrame(sf::IntRect(0, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(16, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(32, 0, 16, 16));
 

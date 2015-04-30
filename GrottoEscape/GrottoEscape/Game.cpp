@@ -130,15 +130,19 @@ void Game::MainLoop()
 				if (!mPlayer->bullets.at(i)->isActive())
 					continue;
 
-
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) &&  mSlime1->getActive())
+				sf::FloatRect areaCollision;
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds(), areaCollision) && mSlime1->getActive())
 				{
-					mSlime1->SetActive(false);
-					mPlayer->bullets.at(i)->SetActive(false);
+					if (areaCollision.width >= 10)
+					{
+						mSlime1->SetActive(false);
+						mPlayer->bullets.at(i)->SetActive(false);
+					}
+
 				}
 
 
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds()) && mSlime2->getActive())
+				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds(), areaCollision) && mSlime2->getActive())
 				{
 					mSlime2->SetActive(false);
 					mPlayer->bullets.at(i)->SetActive(false);
@@ -205,7 +209,7 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 	int itemType;
 	if (layers.size() <= 0)
 		return;
-
+	int slimeCount = 0;
 	for (auto layer = layers.begin(); layer != layers.end(); ++layer)
 	{
 		for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
@@ -220,9 +224,14 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 				items.push_back(new Item(object->GetPosition(),(ItemType)itemType));
 			}
 
-			if (layer->name == "Enemies")
+			if (layer->name == "Waypoints")
 			{
-				//Create Player
+				std::string name;
+
+				name = object->GetName();
+
+
+
 			}
 
 			if (layer->name == "Player")
