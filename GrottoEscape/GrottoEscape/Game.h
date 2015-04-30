@@ -4,6 +4,7 @@
 #include "AnimatedSprite.h"
 #include "Item.h"
 #include "Slime.h"
+#include "ImageManager.h"
 class Game
 {
 
@@ -12,6 +13,7 @@ private:
 	static const sf::Time	TimePerFrame;
 	std::vector<Item*> items; 
 	std::vector<Slime*> slimes;
+
 public:
 
 	float getFPS(const sf::Time& time);
@@ -21,5 +23,6 @@ public:
 	void HandleInput();
 	~Game();
 	void GenerateItems(std::vector<tmx::MapLayer> layers);
+	ImageManager imageManager;
 };
 

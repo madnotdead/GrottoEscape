@@ -77,4 +77,8 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="Enemies">
+  <object name="Slime1" type="S" x="49" y="289.25" width="10" height="10.25"/>
+  <object name="Slime2" type="S" x="929.25" y="238.625" width="10" height="10.25"/>
+ </objectgroup>
 </map>

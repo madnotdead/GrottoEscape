@@ -12,7 +12,7 @@ Bullet::Bullet(std::vector<tmx::MapObject> _collisionObjects) :AnimatedSprite(sf
 	else
 		std::cout << "items.png loaded!" << std::endl;
 
-	//sf::Texture textureInverted;
+	sf::Texture textureInverted;
 	if (!inv_texture.loadFromFile("img/items_i.png"))
 	{
 		std::cout << "items_i.png loaded!" << std::endl;
@@ -126,7 +126,7 @@ bool Bullet::CheckCollision()
 			if (object->GetAABB().intersects(collisionRect))
 			{
 				currentAnimation = &explotionAnimation;
-				bulletlifeTime += .3;
+				bulletlifeTime += 0.3f;
 				return true;
 			}
 				

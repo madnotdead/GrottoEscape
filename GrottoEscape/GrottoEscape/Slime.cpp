@@ -46,6 +46,11 @@ Slime::Slime(std::vector<tmx::MapLayer> _layers, std::string name) :AnimatedSpri
 }
 
 
+Slime::Slime(sf::Vector2f position, std::string name) :AnimatedSprite(sf::seconds(0.2f), true, false)
+{
+	setPosition(position);
+}
+
 Slime::~Slime()
 {
 }
@@ -183,4 +188,9 @@ bool Slime::getActive()
 sf::FloatRect Slime::getAdjustedGlobalBounds()
 {
 	return sf::FloatRect(getGlobalBounds().left + 4, getGlobalBounds().top + 4, getGlobalBounds().width - 4, getGlobalBounds().height - 4);
+}
+
+std::string Slime::GetName()
+{
+	return name;
 }

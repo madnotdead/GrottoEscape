@@ -21,3 +21,4 @@
 #include "Item.h"
 #define GRAVITY = 500
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita
+#include "ImageManager.h"

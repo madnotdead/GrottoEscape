@@ -1,6 +1,7 @@
 #pragma once
 #include "AnimatedSprite.h"
 #include "stdafx.h"
+#include <stdio.h>
 class Slime : public AnimatedSprite
 {
 private:
@@ -21,6 +22,7 @@ private:
 	//std::vector<tmx::MapObject> collisionObjects;
 public:
 	Slime(std::vector<tmx::MapLayer> _layers, std::string name);
+	Slime(sf::Vector2f position, std::string name);
 	~Slime();
 	void HandleCollision();
 	void Update(sf::Time dt);
@@ -29,5 +31,6 @@ public:
 	void SetActive(bool active);
 	bool getActive();
 	sf::FloatRect getAdjustedGlobalBounds();
+	std::string GetName();
 };
 

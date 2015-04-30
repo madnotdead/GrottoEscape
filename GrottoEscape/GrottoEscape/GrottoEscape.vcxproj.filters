@@ -25,6 +25,12 @@
     <Filter Include="Archivos de código fuente\AnimatedSprite">
       <UniqueIdentifier>{89f39c79-bf08-4f66-909c-5dde4e8c24e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de código fuente\Utils">
+      <UniqueIdentifier>{a2cb0e17-c5d0-4114-a890-7736a7dffae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Utils">
+      <UniqueIdentifier>{2a7685a5-2381-4924-8b1a-58f3e4d64467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -54,9 +60,6 @@
     <ClInclude Include="Player.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="interpolate.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -66,28 +69,10 @@
     <ClInclude Include="Item.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="managers\ImageManager.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="interpolate.h">
+      <Filter>Archivos de encabezado\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="managers\ResourceManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="managers\SoundManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\CollisionDetection.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\FPSCalculator.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\Timer.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\TimerManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\Types.h">
+    <ClInclude Include="ImageManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,9 +116,6 @@
     <ClCompile Include="..\..\..\..\Copy\sfml-tmxloader-master\src\pugixml\pugixml.cpp">
       <Filter>Archivos de código fuente\MapLoader</Filter>
     </ClCompile>
-    <ClCompile Include="interpolate.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -143,16 +125,10 @@
     <ClCompile Include="Item.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="managers\ImageManager.cpp">
-      <Filter>Archivos de código fuente</Filter>
+    <ClCompile Include="interpolate.cpp">
+      <Filter>Archivos de código fuente\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="managers\SoundManager.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\CollisionDetection.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\FPSCalculator.cpp">
+    <ClCompile Include="ImageManager.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

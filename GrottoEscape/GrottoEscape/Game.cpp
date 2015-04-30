@@ -86,7 +86,7 @@ void Game::MainLoop()
 	main->setLoop(true);
 	main->setVolume(100.0f);
 	//main->play();
-
+	imageManager.AddResourceDirectoy("img/");
 	GenerateItems(ml.GetLayers());
 
 	while(wnd->isOpen())
@@ -98,18 +98,21 @@ void Game::MainLoop()
 		{
 			timeSinceLastUpdate -= TimePerFrame;
 
+			//Update logic
 			mPlayer->Loop(TimePerFrame);
-			mSlime1->Update(TimePerFrame);
-			mSlime2->Update(TimePerFrame);
-			
-			for (size_t i = 0; i < items.size(); i++)
+
+			for (size_t i = 0; i < slimes.size(); i++)
 			{
-				items.at(i)->Update(TimePerFrame);
+				slimes.at(i)->Update(TimePerFrame);
 			}
 
+			
+			for (size_t i = 0; i < items.size(); i++)
+				items.at(i)->Update(TimePerFrame);
+
+			//Collision Detection
 			for (size_t i = 0; i < items.size(); i++)
 			{
-				//if (CollisionDetection::PixelPerfectTest(mPlayer, items.at(i))
 				if (mPlayer->getGlobalBounds().intersects(items.at(i)->getGlobalBounds()))
 				{
 					if (!items.at(i)->IsActive())
@@ -119,11 +122,15 @@ void Game::MainLoop()
 				}
 			}
 			
-			if (mPlayer->getGlobalBounds().intersects(mSlime1->getGlobalBounds()) && mSlime1->getActive())
-				mPlayer->Hit();
 
-			if (mPlayer->getGlobalBounds().intersects(mSlime2->getGlobalBounds()) && mSlime2->getActive())
-				mPlayer->Hit();
+			for (size_t i = 0; i < slimes.size(); i++)
+			{
+				if (!slimes.at(i)->getActive())
+					continue;
+
+				if (mPlayer->getGlobalBounds().intersects(slimes.at(i)->getGlobalBounds()))
+					mPlayer->Hit();
+			}
 
 			for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 			{
@@ -131,68 +138,52 @@ void Game::MainLoop()
 					continue;
 
 				sf::FloatRect areaCollision;
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime1->getGlobalBounds(), areaCollision) && mSlime1->getActive())
+
+				for (size_t j = 0; j < slimes.size(); j++)
 				{
-					if (areaCollision.width >= 10)
+					if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(slimes.at(j)->getGlobalBounds(), areaCollision) && slimes.at(j)->getActive())
 					{
-						mSlime1->SetActive(false);
-						mPlayer->bullets.at(i)->SetActive(false);
+						//hack to avoid bullet collision with sprites's transparent area
+						if (areaCollision.width >= 10)
+						{
+							slimes.at(j)->SetActive(false);
+							mPlayer->bullets.at(i)->SetActive(false);
+						}
 					}
-
 				}
-
-
-				if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(mSlime2->getGlobalBounds(), areaCollision) && mSlime2->getActive())
-				{
-					mSlime2->SetActive(false);
-					mPlayer->bullets.at(i)->SetActive(false);
-				}
-
 			}
 
 			
 		}
 
-
-		//if (mPlayer->getPosition().x > 50 ){
-			//viewPosition.x = mPlayer->getPosition().x + 100;
-			//viewPosition.y = mPlayer->getPosition().y - 50;
-		//}
-		//else
-		//{
-		//	viewPosition.x = mPlayer->getPosition().x;
-		//	viewPosition.y = mPlayer->getPosition().y ;
-		//}
-		//	
-
-		//else
-		//	viewPosition.x = mPlayer->getPosition().x;
-
-		//	viewPosition.y = mPlayer->getPosition().y;
-		//}
-
-		
-
 		view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 50);
+
 		wnd->setView(view);
+
+		//Draw in screen
 		wnd->clear();
+		
+		//Draw tiles
 		wnd->draw(ml);
+		
+		//Draw player
 		wnd->draw(*mPlayer);
 		
-		if (mSlime1->getActive())
-			wnd->draw(*mSlime1);
+		//Draw active slimes
+		for (size_t i = 0; i < slimes.size(); i++)
+		{
+			if (slimes.at(i)->getActive())
+				wnd->draw(*slimes.at(i));
+		}
 
-		if (mSlime2->getActive())
-			wnd->draw(*mSlime2);
-
-
-
+		//Draw active bullets
 		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
 		{
 			if (mPlayer->bullets.at(i)->isActive())
 				wnd->draw(*mPlayer->bullets.at(i));
 		}
 
+		//Draw active items
 		for (size_t i = 0; i < items.size(); i++)
 		{
 			if (items.at(i)->IsActive())
@@ -209,7 +200,9 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 	int itemType;
 	if (layers.size() <= 0)
 		return;
-	int slimeCount = 0;
+	
+	//int slimeCount = 0;
+
 	for (auto layer = layers.begin(); layer != layers.end(); ++layer)
 	{
 		for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
@@ -220,30 +213,24 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 					continue;
 
 				itemType = atoi(object->GetPropertyString("ItemType").c_str());
-
 				items.push_back(new Item(object->GetPosition(),(ItemType)itemType));
 			}
 
-			if (layer->name == "Waypoints")
+			if (layer->name == "Enemies")
 			{
-				std::string name;
-
-				name = object->GetName();
-
-
-
+				if (object->GetType() == "S")
+					slimes.push_back(new Slime(layers, object->GetName()));
 			}
+			//if (layer->name == "Player")
+			//{
+			//	//Create Enemies
+			//}
 
-			if (layer->name == "Player")
-			{
-				//Create Enemies
-			}
-
-			if (layer->name == "Waypoints")
-			{
-				//Asigno los waypoints a los enemigos
-			}
+			//if (layer->name == "Waypoints")
+			//{
+			//	//Asigno los waypoints a los enemigos
+			//}
 		}
 	}
-	
 }
+
