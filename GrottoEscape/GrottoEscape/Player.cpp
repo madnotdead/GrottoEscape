@@ -122,7 +122,7 @@ Player::~Player()
 
 }
 
-void Player::Loop(sf::Time dt)
+void Player::Update(sf::Time dt)
 {
 	if (!isDead)
 	{
@@ -266,6 +266,10 @@ void Player::Loop(sf::Time dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
 		setPosition(initialPosition);
+
+		for (size_t i = 0; i < bullets.size(); i++)
+			bullets.at(i)->SetActive(false);
+
 		isDead = false;
 	}
 

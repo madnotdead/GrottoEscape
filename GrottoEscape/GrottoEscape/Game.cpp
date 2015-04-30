@@ -39,6 +39,15 @@ void Game::HandleInput()
 		}
 			break;
 
+		case sf::Event::KeyPressed:
+			{
+				if (evento.key.code == sf::Keyboard::R)
+				{
+					GenerateItems(layers);
+				}
+			}
+			break;
+
 		default:	
 			break;
 		}
@@ -87,7 +96,8 @@ void Game::MainLoop()
 	main->setVolume(100.0f);
 	//main->play();
 	imageManager.AddResourceDirectoy("img/");
-	GenerateItems(ml.GetLayers());
+	layers = ml.GetLayers();
+	GenerateItems(layers);
 
 	while(wnd->isOpen())
 	{
@@ -99,13 +109,10 @@ void Game::MainLoop()
 			timeSinceLastUpdate -= TimePerFrame;
 
 			//Update logic
-			mPlayer->Loop(TimePerFrame);
+			mPlayer->Update(TimePerFrame);
 
 			for (size_t i = 0; i < slimes.size(); i++)
-			{
 				slimes.at(i)->Update(TimePerFrame);
-			}
-
 			
 			for (size_t i = 0; i < items.size(); i++)
 				items.at(i)->Update(TimePerFrame);
@@ -156,8 +163,19 @@ void Game::MainLoop()
 			
 		}
 
-		view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 50);
+		HandleInput();
 
+		if (mPlayer->getPosition().x > 120 && mPlayer->getPosition().x < 1160)
+			view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 50);
+		else
+		{
+			if (mPlayer->getPosition().x < 1160)
+				view.setCenter(120, mPlayer->getPosition().y - 50);
+			else
+				view.setCenter(1160, mPlayer->getPosition().y - 50);
+		}
+			
+		//1160
 		wnd->setView(view);
 
 		//Draw in screen
@@ -201,7 +219,8 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 	if (layers.size() <= 0)
 		return;
 	
-	//int slimeCount = 0;
+	items.clear();
+	slimes.clear();
 
 	for (auto layer = layers.begin(); layer != layers.end(); ++layer)
 	{
@@ -211,7 +230,7 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 			{
 				if (!object->Visible())
 					continue;
-
+				
 				itemType = atoi(object->GetPropertyString("ItemType").c_str());
 				items.push_back(new Item(object->GetPosition(),(ItemType)itemType));
 			}

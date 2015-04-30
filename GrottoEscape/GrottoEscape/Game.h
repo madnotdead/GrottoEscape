@@ -5,6 +5,7 @@
 #include "Item.h"
 #include "Slime.h"
 #include "ImageManager.h"
+#include "tmx\MapLayer.h"
 class Game
 {
 
@@ -13,7 +14,7 @@ private:
 	static const sf::Time	TimePerFrame;
 	std::vector<Item*> items; 
 	std::vector<Slime*> slimes;
-
+	std::vector<tmx::MapLayer> layers;
 public:
 
 	float getFPS(const sf::Time& time);

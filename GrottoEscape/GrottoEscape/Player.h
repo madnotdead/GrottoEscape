@@ -9,7 +9,7 @@ class Player :
 public:
 	Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers);
 	~Player();
-	void Loop(sf::Time dt);
+	void Update(sf::Time dt);
 	void HandleCollision();
 	void GetLayers();
 	void Jump(float deltaTime);
