@@ -118,6 +118,26 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	winSound= new sf::Sound(*winBuffer);
 	winSound->setVolume(100.0f);
 
+	deathBuffer = new sf::SoundBuffer;
+	if (!deathBuffer->loadFromFile("audio/death.wav"))
+	{
+		delete deathBuffer;
+		deathBuffer = 0;
+	}
+
+	deathSound = new sf::Sound(*deathBuffer);
+	deathSound->setVolume(100.0f);
+
+	hurtBuffer = new sf::SoundBuffer;
+	if (!hurtBuffer->loadFromFile("audio/hurt.wav"))
+	{
+		delete hurtBuffer;
+		hurtBuffer = 0;
+	}
+
+	hurtSound = new sf::Sound(*hurtBuffer);
+	hurtSound->setVolume(100.0f);
+
 	winRate = 0.5f;
 	currentState = PlayerState::ALIVE; 
 }
@@ -246,13 +266,21 @@ void Player::Update(sf::Time dt)
 	case PlayerState::DEAD:
 		
 		//ApplyGravity();
+
 		currentAnimation = &deadAnimation;
 		health = 0;
 
+		if (isActive())
+			deathSound->play();
+
+		SetActive(false);
 		break;
 	default:
 		break;
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		deathSound->stop();
 	
 	//Modify velocity using gravity
 	ApplyGravity();
@@ -393,6 +421,7 @@ void Player::Hit(int damage)
 		timeSinceLastHit = 2;
 		playerVelocity.y = -300;
 		health -= damage;
+		hurtSound->play();
 	}
 	
 
@@ -457,4 +486,24 @@ void Player::ApplyGravity()
 		playerVelocity.y += 20;
 	else
 		playerVelocity.y = 0;
+}
+
+bool Player::Succeded()
+{
+	return (currentState == PlayerState::SUCCEDED);
+}
+
+bool Player::Dead()
+{
+	return (currentState == PlayerState::DEAD);
+}
+
+void Player::SetActive(bool active)
+{
+	this->active = active;
+}
+
+bool Player::isActive()
+{
+	return active;
 }

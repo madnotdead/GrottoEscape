@@ -27,6 +27,10 @@ public:
 	void HandleItemCollision(Item *mItem);
 	int GetHealth();
 	void ApplyGravity();
+	bool Succeded();
+	bool Dead();
+	bool isActive();
+	void SetActive(bool active);
 private:
 	Animation succededAnimation;
 	Animation walkingAnimationRight;
@@ -80,6 +84,10 @@ private:
 	sf::Sound *pickUpSound;
 	sf::SoundBuffer *winBuffer;
 	sf::Sound *winSound;
+	sf::SoundBuffer *deathBuffer;
+	sf::Sound *deathSound;
+	sf::SoundBuffer *hurtBuffer;
+	sf::Sound *hurtSound;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 	sf::Vector2f initialPosition;
@@ -90,7 +98,7 @@ private:
 	float winRate;
 	float winCount;
 	PlayerState currentState;
-
+	bool active = true;
 };
 
 

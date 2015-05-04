@@ -9,6 +9,16 @@ Game::Game(int width, int height)
 	//wnd->setVerticalSyncEnabled(true);
 	wnd->setFramerateLimit(60);
 	currentState = GameStates::PLAYING;
+
+	pauseBuffer = new sf::SoundBuffer;
+	if (!pauseBuffer->loadFromFile("audio/pause.wav"))
+	{
+		delete pauseBuffer;
+		pauseBuffer = 0;
+	}
+
+	pauseSound = new sf::Sound(*pauseBuffer);
+	pauseSound->setVolume(100.0f);
 }
 
 Game::~Game()
@@ -45,17 +55,30 @@ void Game::HandleInput()
 				if (evento.key.code == sf::Keyboard::R)
 				{
 					if (currentState == GameStates::PLAYING)
+					{
 						GenerateItems(layers);
+						main->stop();
+						main->play();
+
+					}
+						
 				}
 				if (evento.key.code == sf::Keyboard::P)
 				{
+					main->pause();
+					pauseSound->play();
+					
 					if (oldState != currentState)
 						oldState = currentState;
 
 					if (currentState == GameStates::PLAYING)
 						currentState = GameStates::PAUSED;
 					else
+					{
 						currentState = GameStates::PLAYING;
+						main->play();
+					}
+						
 				}
 			}
 			break;
@@ -91,7 +114,7 @@ void Game::MainLoop()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
 
 
-	sf::SoundBuffer *mainThemeBuffer;
+	//sf::SoundBuffer *mainThemeBuffer;
 	mainThemeBuffer = new sf::SoundBuffer();
 
 	if (!mainThemeBuffer->loadFromFile("audio/main.wav"))
@@ -101,7 +124,7 @@ void Game::MainLoop()
 		mainThemeBuffer = 0;
 	}
 
-	sf::Sound *main = new sf::Sound(*mainThemeBuffer);
+	main = new sf::Sound(*mainThemeBuffer);
 	main->setLoop(true);
 	main->setVolume(75.0f);
 	main->play();
@@ -143,7 +166,7 @@ void Game::MainLoop()
 
 
 			}
-
+	
 			//Collision Detection
 
 			HandleCollision();
@@ -165,6 +188,9 @@ void Game::MainLoop()
 			hBar->setPosition(view.getCenter().x - 105, view.getCenter().y - 75);
 
 			wnd->setView(view);
+
+			if (mPlayer->Succeded() || mPlayer->Dead())
+				main->stop();
 		}
 		else
 		{

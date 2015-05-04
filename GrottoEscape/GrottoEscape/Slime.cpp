@@ -43,6 +43,16 @@ Slime::Slime(std::vector<tmx::MapLayer> _layers, std::string name) :AnimatedSpri
 	setPosition(points.at(0));
 
 	SetActive(true);
+
+	hitBuffer = new sf::SoundBuffer;
+	if (!hitBuffer->loadFromFile("audio/hit.wav"))
+	{
+		delete hitBuffer;
+		hitBuffer = 0;
+	}
+
+	hitSound = new sf::Sound(*hitBuffer);
+	hitSound->setVolume(100.0f);
 }
 
 
@@ -178,6 +188,9 @@ void Slime::GetLayers()
 void Slime::SetActive(bool active)
 {
 	this->isActive = active;
+
+	if (!active)
+		hitSound->play();
 }
 
 bool Slime::getActive()

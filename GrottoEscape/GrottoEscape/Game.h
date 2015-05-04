@@ -30,6 +30,10 @@ private:
 	tmx::MapLoader* map;
 	GameStates currentState;
 	GameStates oldState;
+	sf::SoundBuffer *mainThemeBuffer;
+	sf::Sound *main;
+	sf::SoundBuffer *pauseBuffer;
+	sf::Sound *pauseSound;
 public:
 
 	float getFPS(const sf::Time& time);
