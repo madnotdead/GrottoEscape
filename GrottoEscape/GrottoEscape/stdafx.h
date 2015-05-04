@@ -19,6 +19,9 @@
 #include <SFML\Audio.hpp>
 #include <SFML\Audio\Music.hpp>
 #include "Item.h"
+#include "FireMonster.h"
 #define GRAVITY = 500
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita
 #include "ImageManager.h"
+#include "Utils.h"
+#include "HealthBar.h"

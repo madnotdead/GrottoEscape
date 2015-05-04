@@ -3,6 +3,14 @@
 #include "Bullet.h"
 #include "stdafx.h"
 #include <SFML\Audio.hpp>
+
+enum PlayerState{
+	ALIVE,
+	DEAD,
+	SUCCEDED
+};
+
+
 class Player :
 	public AnimatedSprite
 {
@@ -15,8 +23,10 @@ public:
 	void Jump(float deltaTime);
 	void DrawBullets();
 	std::vector<Bullet*> bullets;
-	void Hit();
+	void Hit(int damage);
 	void HandleItemCollision(Item *mItem);
+	int GetHealth();
+	void ApplyGravity();
 private:
 	Animation succededAnimation;
 	Animation walkingAnimationRight;
@@ -28,6 +38,7 @@ private:
 	Animation deadAnimation;
 	Animation shootLeftAnimation;
 	Animation shootRightAnimation;
+	Animation winAnimation;
 	Animation* currentAnimation;
 	float speed;
 	bool noKeyWasPressed;
@@ -67,11 +78,19 @@ private:
 	sf::Sound *jumpSound;
 	sf::SoundBuffer *pickUpBuffer;
 	sf::Sound *pickUpSound;
+	sf::SoundBuffer *winBuffer;
+	sf::Sound *winSound;
 	//float speed;
 	//tmx::MapLayer collisionLayer;
 	sf::Vector2f initialPosition;
-	int lifes;
+	int health = 6;
 	int doubleJump;
 	int runs;
+	bool win;
+	float winRate;
+	float winCount;
+	PlayerState currentState;
+
 };
+
 

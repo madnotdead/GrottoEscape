@@ -42,7 +42,7 @@
   <object x="16" y="288" width="31.9375" height="16"/>
  </objectgroup>
  <objectgroup name="Player">
-  <object x="18.3636" y="272.318" width="9.45455" height="9.45455"/>
+  <object x="19.5151" y="272.015" width="9.45455" height="9.45455"/>
  </objectgroup>
  <objectgroup name="Waypoints">
   <object name="Slime1" x="48.5" y="289.188" width="15" height="14.5"/>
@@ -80,5 +80,6 @@
  <objectgroup name="Enemies">
   <object name="Slime1" type="S" x="49" y="289.25" width="10" height="10.25"/>
   <object name="Slime2" type="S" x="929.25" y="238.625" width="10" height="10.25"/>
+  <object name="FireMonster1" type="F" x="1136.92" y="255.25" width="13" height="14.25"/>
  </objectgroup>
 </map>

@@ -7,19 +7,17 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	window = wnd;
 	layers = _layers;
 	onGround = false;
+
 	// load texture (spritesheet)
-	//sf::Texture texture;
 	if (!texture.loadFromFile("img/player_2.png"))
 	{
 		std::cout << "Failed to load player spritesheet: player_2.png!" << std::endl;
-		//return 1;
 	}
 
 	//sf::Texture textureInverted;
 	if (!textureInverted.loadFromFile("img/player_2_i.png"))
 	{
 		std::cout << "Failed to load player spritesheet: player_2_i.png!" << std::endl;
-		//return 1;
 	}
 	
 	// set up the animations for all four directions (set spritesheet and push frames)
@@ -54,10 +52,10 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	shootRightAnimation.setSpriteSheet(texture);
 	shootRightAnimation.addFrame(sf::IntRect(48, 0, 16, 16));
 
-	currentAnimation = &idleAnimationRight;
+	winAnimation.setSpriteSheet(texture);
+	winAnimation.addFrame(sf::IntRect(32, 16, 16, 16));
 
-	// set up AnimatedSprite
-//	setPosition(sf::Vector2f(400,300));
+	currentAnimation = &idleAnimationRight;
 
 	speed = 80.f;
 	noKeyWasPressed = true;
@@ -66,19 +64,20 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
 	playerVelocity = sf::Vector2f(0, 0);
 	GetLayers();
-
-	
+		
 	jumpF = 400;
 	mass = 75;
 
 	jumpRate = 0.6f;
 	shootRate = 0.5f;
+
 	for (size_t i = 0; i < 10; i++)
 	{
 		bullets.push_back(new Bullet(collisionObjects));
 	}
 
 	jumpBuffer = new sf::SoundBuffer;
+
 	if (!jumpBuffer->loadFromFile("audio/jump.wav"))
 	{
 		delete jumpBuffer;
@@ -108,12 +107,24 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 
 	pickUpSound = new sf::Sound(*pickUpBuffer);
 	pickUpSound->setVolume(50.0f);
-}
 
+	winBuffer = new sf::SoundBuffer;
+	if (!winBuffer->loadFromFile("audio/success.wav"))
+	{
+		delete winBuffer;
+		winBuffer = 0;
+	}
+
+	winSound= new sf::Sound(*winBuffer);
+	winSound->setVolume(100.0f);
+
+	winRate = 0.5f;
+	currentState = PlayerState::ALIVE; 
+}
 
 Player::~Player()
 {
-	delete currentAnimation;
+	//delete currentAnimation;
 
 	for (size_t i = 0; i < bullets.size(); i++)
 	{
@@ -124,24 +135,23 @@ Player::~Player()
 
 void Player::Update(sf::Time dt)
 {
-	if (!isDead)
+	//Auxiliar variables to store position
+	sf::Vector2f newPostion(0, 0);
+	
+	sf::Vector2f movement(0.f, 0.f);
+
+	switch (currentState)
 	{
-		float maxInAir = 0.3f;
-		float gravity = 20;
-		// if a key was pressed set the correct animation and move correctly
-		sf::Vector2f movement(0.f, 0.f);
+	case PlayerState::ALIVE:
 
-
-
-		float velX = 0.0f;
 		playerVelocity.x = 0;
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			if (onGround)
 				currentAnimation = &walkingAnimationLeft;
 
 			movement.x -= speed;
-			velX = -80.0f;
 			noKeyWasPressed = false;
 			facingRight = false;
 			playerVelocity.x = -80;
@@ -151,11 +161,10 @@ void Player::Update(sf::Time dt)
 		{
 			if (onGround)
 				currentAnimation = &walkingAnimationRight;
-			
+
 			movement.x = speed;
 			noKeyWasPressed = false;
 			facingRight = true;
-			velX = 80.0f;
 			playerVelocity.x = 80;
 		}
 
@@ -181,56 +190,17 @@ void Player::Update(sf::Time dt)
 			noKeyWasPressed = false;
 		}
 
-		
-			
-
-
-		/////////////////////////////////////////////////////////DEBUG
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-		//	currentAnimation = &deadAnimation;
-
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-		//	currentAnimation = &shootLeftAnimation;
-
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-		//	currentAnimation = &shootRightAnimation;
-
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-		//	currentAnimation = &jumpLeftAnimation;
-
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
-		//	currentAnimation = &jumpRightAnimation;
-		/////////////////////////////////////////////////////////DEBUG
-		float velY = 200.0f;
-
-		//std::cout << "inAir < maxInAir: " << (inAir < maxInAir) << std::endl;
-		float currentFloorHeigth = 0;
-
 		jumpTime += dt.asSeconds();
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && onGround && jumpTime >= jumpRate)
 		{
-			//movement.y -= gravity;
-			//inAir += dt.asSeconds();
-			//std::cout << "jumpTime: " << jumpTime << std::endl;
 			jumpTime = 0.0f;
-
 			onGround = false;
-			velY = -200.0f;
 			isJumping = true;
-			//currentFloorHeigth = getPosition().y + 16;
 			noKeyWasPressed = false;
 			playerVelocity.y = -275;
 			jumpSound->play();
 		}
-		else
-		{
-			if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
-				playerVelocity.y += gravity;
-			else
-				playerVelocity.y = 0;
-		}
-
 
 		if (isJumping)
 		{
@@ -240,15 +210,13 @@ void Player::Update(sf::Time dt)
 				currentAnimation = &jumpLeftAnimation;
 		}
 
-		float yPosition = getPosition().y + velY * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
-		float xPosition = getPosition().x + velX * dt.asSeconds();
-		
-		move(playerVelocity * dt.asSeconds());
-		
+		//To avoid player from being hit constantly
+		if (timeSinceLastHit > 0)
+			timeSinceLastHit -= dt.asSeconds();
+
 		// if no key was pressed stop the animation
 		if (noKeyWasPressed)
 		{
-			///playerVelocity.x = 0;
 			stop();
 
 			if (facingRight)
@@ -258,32 +226,49 @@ void Player::Update(sf::Time dt)
 		}
 
 		noKeyWasPressed = true;
-	}
-	else
+		
+		break;
+	case PlayerState::SUCCEDED:
+		
+		currentAnimation = &winAnimation;
+
+		//Little celebration 
+		winCount += dt.asSeconds();
+		if (winCount > winRate)
+		{
+			playerVelocity.y = -100;
+			winCount = 0;
+		}
+
+		playerVelocity.x = 0;
+
+		break;
+	case PlayerState::DEAD:
+		
+		//ApplyGravity();
 		currentAnimation = &deadAnimation;
+		health = 0;
+
+		break;
+	default:
+		break;
+	}
 	
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-	{
-		setPosition(initialPosition);
-
-		for (size_t i = 0; i < bullets.size(); i++)
-			bullets.at(i)->SetActive(false);
-
-		isDead = false;
-	}
-
-	if (timeSinceLastHit > 0)
-	{
-		timeSinceLastHit -= dt.asSeconds();
-	}
-
+	//Modify velocity using gravity
+	ApplyGravity();
+		
+	newPostion.y = getPosition().y + playerVelocity.y * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
+	newPostion.x = getPosition().x + playerVelocity.x * dt.asSeconds();
+	//move(playerVelocity * dt.asSeconds());
+	setPosition(newPostion);
+	
 	play(*currentAnimation);
 	// update AnimatedSprite
 	update(dt);
 
 	HandleCollision();	
 
+	//updateBullets
 	for (size_t i = 0; i < 10; i++)
 	{
 		bullets[i]->Update(dt);
@@ -322,7 +307,12 @@ void Player::HandleCollision()
 			if (object->GetAABB().intersects(getGlobalBounds(), area))
 			{
 				if (object->GetPropertyString("IsLava") == "true")
+				{
+					currentState = PlayerState::DEAD;
 					isDead = true;
+					health = 0;
+				}
+					
 
 				if (area.width > area.height)
 				{
@@ -395,16 +385,23 @@ void Player::DrawBullets()
 	
 }
 
-void Player::Hit()
+void Player::Hit(int damage)
 {
 
-	if (timeSinceLastHit <= 0)
+	if (timeSinceLastHit <= 0 && !isDead)
 	{
 		timeSinceLastHit = 2;
 		playerVelocity.y = -300;
+		health -= damage;
 	}
-	//hited = true;
+	
 
+	if (health <= 0)
+	{
+		isDead = true;
+		currentState = PlayerState::DEAD;
+	}
+		
 	//std::cout << "playerVelocity.x: " << playerVelocity.x << std::endl;
 
 }
@@ -412,6 +409,8 @@ void Player::Hit()
 void Player::HandleItemCollision(Item *mItem)
 {
 
+	if (!mItem->IsActive())
+		return;	
 	bool final = false;
 	switch (mItem->GetType())
 	{
@@ -428,8 +427,12 @@ void Player::HandleItemCollision(Item *mItem)
 		std::cout << "collectable item collected." << std::endl;
 		break;
 	case FINAL:
-		std::cout << "Final item collected." << std::endl;
+		//std::cout << "Final item collected." << std::endl;
+		mItem->SetActive(false);
+		currentState = PlayerState::SUCCEDED;
 		final = true;
+		win = true;
+		winSound->play();
 		break;
 	default:
 		break;
@@ -441,4 +444,17 @@ void Player::HandleItemCollision(Item *mItem)
 		pickUpSound->play();
 	}
 		
+}
+
+int Player::GetHealth()
+{
+	return health;
+}
+
+void Player::ApplyGravity()
+{
+	if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad
+		playerVelocity.y += 20;
+	else
+		playerVelocity.y = 0;
 }
