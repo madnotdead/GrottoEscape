@@ -89,3 +89,8 @@ sf::FloatRect Item::getAdjustedGlobalBounds()
 
 	return sf::FloatRect(getGlobalBounds().left + offSet, getGlobalBounds().top + offSet, getGlobalBounds().width - offSet, getGlobalBounds().height - offSet);
 }
+
+bool Item::Collected()
+{
+	return !IsActive();
+}

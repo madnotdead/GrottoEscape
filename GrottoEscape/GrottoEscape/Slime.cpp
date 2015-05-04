@@ -198,6 +198,7 @@ bool Slime::getActive()
 	return this->isActive;
 }
 
+
 sf::FloatRect Slime::getAdjustedGlobalBounds()
 {
 	return sf::FloatRect(getGlobalBounds().left + 4, getGlobalBounds().top + 4, getGlobalBounds().width - 4, getGlobalBounds().height - 4);
@@ -206,4 +207,9 @@ sf::FloatRect Slime::getAdjustedGlobalBounds()
 std::string Slime::GetName()
 {
 	return name;
+}
+
+void Slime::Die()
+{
+	SetActive(false);
 }

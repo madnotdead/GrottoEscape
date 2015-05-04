@@ -35,5 +35,6 @@ public:
 	bool getActive();
 	sf::FloatRect getAdjustedGlobalBounds();
 	std::string GetName();
+	void Die();
 };
 

@@ -8,7 +8,7 @@ Game::Game(int width, int height)
 	wnd = new sf::RenderWindow(sf::VideoMode(width, height), "Grotto Escape");
 	//wnd->setVerticalSyncEnabled(true);
 	wnd->setFramerateLimit(60);
-	currentState = GameStates::PLAYING;
+	currentState = GameStates::INTRO;
 
 	pauseBuffer = new sf::SoundBuffer;
 	if (!pauseBuffer->loadFromFile("audio/pause.wav"))
@@ -33,55 +33,62 @@ void Game::HandleInput()
 	{
 		switch (evento.type)
 		{
-		case sf::Event::EventType::MouseButtonPressed://Evento para capturar el click del mouse
-		{
-			//sf::Vector2i pos = sf::Mouse::getPosition(//Obtengo la posicion del mouse en la ventana al momento del click
-
-			//if (tablero.hayFichaElegida())//Compruebo si existe una ficha elegida, si existe se realiza el movimiento
-			//	tablero.hacerMovimiento(pos.x, pos.y);//Realizo el movimiento de la ficha seleccionada
-			//else
-			//	tablero.elegirFicha(pos.x, pos.y);//Elijo la ficha donde se realizo el click
-		}
-			break;
-
-		case sf::Event::EventType::Closed://Evento para capturar el cierre de la ventana
-		{
-			wnd->close();//Cierro la ventana
-		}
-			break;
-
-		case sf::Event::KeyPressed:
+			case sf::Event::EventType::Closed://Evento para capturar el cierre de la ventana
 			{
-				if (evento.key.code == sf::Keyboard::R)
-				{
-					if (currentState == GameStates::PLAYING)
-					{
-						GenerateItems(layers);
-						main->stop();
-						main->play();
-
-					}
-						
-				}
-				if (evento.key.code == sf::Keyboard::P)
-				{
-					main->pause();
-					pauseSound->play();
-					
-					if (oldState != currentState)
-						oldState = currentState;
-
-					if (currentState == GameStates::PLAYING)
-						currentState = GameStates::PAUSED;
-					else
-					{
-						currentState = GameStates::PLAYING;
-						main->play();
-					}
-						
-				}
+				wnd->close();//Cierro la ventana
 			}
 			break;
+
+			case sf::Event::KeyPressed:
+				{
+
+					if (evento.key.code == sf::Keyboard::Space)
+					{
+						if (currentState == GameStates::INTRO)
+						{
+							currentState = GameStates::PLAYING;
+							GenerateItems(layers);
+							main->play();
+						}
+							
+					}
+
+					if (evento.key.code == sf::Keyboard::Escape)
+					{
+						currentState = GameStates::INTRO;
+						main->stop();
+					}
+						
+
+					if (evento.key.code == sf::Keyboard::R)
+					{
+						if (currentState == GameStates::PLAYING)
+						{
+							GenerateItems(layers);
+							main->stop();
+							main->play();
+						}					
+					}
+					
+					if (evento.key.code == sf::Keyboard::P)
+					{
+						main->pause();
+						pauseSound->play();
+					
+						if (oldState != currentState)
+							oldState = currentState;
+
+						if (currentState == GameStates::PLAYING)
+							currentState = GameStates::PAUSED;
+						else
+						{
+							currentState = GameStates::PLAYING;
+							main->play();
+						}
+					}
+
+				}
+				break;
 
 		default:	
 			break;
@@ -127,13 +134,13 @@ void Game::MainLoop()
 	main = new sf::Sound(*mainThemeBuffer);
 	main->setLoop(true);
 	main->setVolume(75.0f);
-	main->play();
+	//main->play();
 
 	layers = map->GetLayers();
 
 	hBar = new HealthBar(view.getCenter());
 
-	GenerateItems(layers);
+
 
 	
 
@@ -141,7 +148,7 @@ void Game::MainLoop()
 	{
 
 
-		if (currentState== GameStates::PLAYING)
+		if (currentState == GameStates::PLAYING)
 		{
 
 			sf::Time elapsedTime = clock.restart();
@@ -163,7 +170,6 @@ void Game::MainLoop()
 
 				for (size_t i = 0; i < fireMonsters.size(); i++)
 					fireMonsters.at(i)->Update(TimePerFrame);
-
 
 			}
 	
@@ -257,39 +263,42 @@ void Game::Draw()
 	//Draw in screen
 	wnd->clear();
 
-	//Draw tiles
-	wnd->draw(*map);
-
-	//Draw player
-	wnd->draw(*mPlayer);
-
-	if (hBar->IsActive())
-		wnd->draw(*hBar);
-
-	for (size_t i = 0; i < fireMonsters.size(); i++)
+	if (currentState != GameStates::INTRO)
 	{
-		wnd->draw(*fireMonsters.at(i));
-	}
+		//Draw tiles
+		wnd->draw(*map);
 
-	//Draw active slimes
-	for (size_t i = 0; i < slimes.size(); i++)
-	{
-		if (slimes.at(i)->getActive())
-			wnd->draw(*slimes.at(i));
-	}
+		//Draw player
+		wnd->draw(*mPlayer);
 
-	//Draw active bullets
-	for (size_t i = 0; i < mPlayer->bullets.size(); i++)
-	{
-		if (mPlayer->bullets.at(i)->isActive())
-			wnd->draw(*mPlayer->bullets.at(i));
-	}
+		if (hBar->IsActive())
+			wnd->draw(*hBar);
 
-	//Draw active items
-	for (size_t i = 0; i < items.size(); i++)
-	{
-		if (items.at(i)->IsActive())
-			wnd->draw(*items.at(i));
+		for (size_t i = 0; i < fireMonsters.size(); i++)
+		{
+			wnd->draw(*fireMonsters.at(i));
+		}
+
+		//Draw active slimes
+		for (size_t i = 0; i < slimes.size(); i++)
+		{
+			if (slimes.at(i)->getActive())
+				wnd->draw(*slimes.at(i));
+		}
+
+		//Draw active bullets
+		for (size_t i = 0; i < mPlayer->bullets.size(); i++)
+		{
+			if (mPlayer->bullets.at(i)->isActive())
+				wnd->draw(*mPlayer->bullets.at(i));
+		}
+
+		//Draw active items
+		for (size_t i = 0; i < items.size(); i++)
+		{
+			if (items.at(i)->IsActive())
+				wnd->draw(*items.at(i));
+		}
 	}
 
 	wnd->display();
@@ -303,14 +312,16 @@ void Game::HandleCollision()
 			mPlayer->Hit(2);
 	}
 
+	sf::FloatRect itemAreaCollision;
 	for (size_t i = 0; i < items.size(); i++)
 	{
-		if (mPlayer->getGlobalBounds().intersects(items.at(i)->getGlobalBounds()))
+		if (mPlayer->getGlobalBounds().intersects(items.at(i)->getGlobalBounds(), itemAreaCollision))
 		{
-			if (!items.at(i)->IsActive())
+			if (items.at(i)->Collected())
 				continue;
 
-			mPlayer->HandleItemCollision(items.at(i));
+			if (itemAreaCollision.width > 10)
+				mPlayer->HandleItemCollision(items.at(i));
 		}
 	}
 
@@ -338,7 +349,7 @@ void Game::HandleCollision()
 				//hack to avoid bullet collision with sprites's transparent area
 				if (areaCollision.width >= 10)
 				{
-					slimes.at(j)->SetActive(false);
+					slimes.at(j)->Die();
 					mPlayer->bullets.at(i)->SetActive(false);
 				}
 			}

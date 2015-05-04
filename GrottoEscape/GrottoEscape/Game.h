@@ -12,6 +12,7 @@
 #include "Player.h"
 
 enum GameStates{
+	INTRO,
 	PLAYING,
 	PAUSED
 };
