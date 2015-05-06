@@ -19,6 +19,14 @@ Game::Game(int width, int height)
 
 	pauseSound = new sf::Sound(*pauseBuffer);
 	pauseSound->setVolume(100.0f);
+
+	if (!introTexture.loadFromFile("img/intro.png"))
+	{
+		std::cout << "Couldnt load intro.png" << std::endl;
+	}
+	
+	introImage.setTexture(introTexture);
+	introImage.setPosition(0, 0);
 }
 
 Game::~Game()
@@ -193,7 +201,7 @@ void Game::MainLoop()
 
 			hBar->setPosition(view.getCenter().x - 105, view.getCenter().y - 75);
 
-			wnd->setView(view);
+		
 
 			if (mPlayer->Succeded() || mPlayer->Dead())
 				main->stop();
@@ -204,7 +212,7 @@ void Game::MainLoop()
 			clock.restart();
 		}
 			
-
+		wnd->setView(view);
 		HandleInput();
 		
 		Draw();
@@ -300,6 +308,8 @@ void Game::Draw()
 				wnd->draw(*items.at(i));
 		}
 	}
+	else
+		wnd->draw(introImage);
 
 	wnd->display();
 }
