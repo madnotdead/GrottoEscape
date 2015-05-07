@@ -29,7 +29,7 @@ FireMonster::FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> colli
 	jumpRate = 3.0f;
 	jumpTime = 0;
 	setPosition(position);
-
+	active = true;
 }
 
 
@@ -39,7 +39,9 @@ FireMonster::~FireMonster()
 
 void FireMonster::Update(sf::Time dt)
 {
-	
+	if (!IsActive())
+		return;
+
 	jumpTime += dt.asSeconds();
 
 	if (jumpTime >= jumpRate)
@@ -104,4 +106,22 @@ void FireMonster::HandleCollision()
 			}
 		}
 	}
+}
+
+bool FireMonster::IsActive()
+{
+	return active;
+}
+
+void FireMonster::SetActive(bool active)
+{
+	this->active = active;
+}
+
+void FireMonster::TakeDamage()
+{
+	hit++;
+
+	if (hit == 2)
+		SetActive(false);
 }

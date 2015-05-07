@@ -37,6 +37,7 @@ private:
 	sf::Sound *pauseSound;
 	sf::Texture introTexture;
 	sf::Sprite introImage; //placeholder for intro screen
+	sf::View view;
 public:
 
 	float getFPS(const sf::Time& time);

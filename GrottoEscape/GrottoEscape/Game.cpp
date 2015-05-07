@@ -64,6 +64,7 @@ void Game::HandleInput()
 					if (evento.key.code == sf::Keyboard::Escape)
 					{
 						currentState = GameStates::INTRO;
+						wnd->setView(wnd->getDefaultView());
 						main->stop();
 					}
 						
@@ -117,14 +118,11 @@ void Game::MainLoop()
 	map->Load("map_test.tmx");
 	sf::Clock frameClock;
 	sf::Time frameTime;
-	//Player* mPlayer = new Player(wnd,ml.GetLayers());
-	//mPlayer = new Player(wnd, ml.GetLayers());
-	sf::View view;
+
 	view.reset(sf::FloatRect(0, 0, 800/2, 600/2));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	sf::Vector2f viewPosition(800 / 2, 600 / 2);
 	view.zoom(0.6f);
-
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;	
 
@@ -146,11 +144,7 @@ void Game::MainLoop()
 
 	layers = map->GetLayers();
 
-	hBar = new HealthBar(view.getCenter());
-
-
-
-	
+	hBar = new HealthBar(view.getCenter());	
 
 	while(wnd->isOpen())
 	{
@@ -201,7 +195,7 @@ void Game::MainLoop()
 
 			hBar->setPosition(view.getCenter().x - 105, view.getCenter().y - 75);
 
-		
+			wnd->setView(view);
 
 			if (mPlayer->Succeded() || mPlayer->Dead())
 				main->stop();
@@ -211,8 +205,9 @@ void Game::MainLoop()
 			timeSinceLastUpdate = sf::Time::Zero;
 			clock.restart();
 		}
-			
-		wnd->setView(view);
+
+		
+		
 		HandleInput();
 		
 		Draw();
@@ -284,6 +279,7 @@ void Game::Draw()
 
 		for (size_t i = 0; i < fireMonsters.size(); i++)
 		{
+			if (fireMonsters.at(i)->IsActive())
 			wnd->draw(*fireMonsters.at(i));
 		}
 
@@ -318,6 +314,9 @@ void Game::HandleCollision()
 {
 	for (size_t i = 0; i < fireMonsters.size(); i++)
 	{
+		if (!fireMonsters.at(i)->IsActive())
+			continue;
+
 		if (fireMonsters.at(i)->getGlobalBounds().intersects(mPlayer->getGlobalBounds()))
 			mPlayer->Hit(2);
 	}
@@ -360,6 +359,19 @@ void Game::HandleCollision()
 				if (areaCollision.width >= 10)
 				{
 					slimes.at(j)->Die();
+					mPlayer->bullets.at(i)->SetActive(false);
+				}
+			}
+		}
+
+		for (size_t j = 0; j < fireMonsters.size(); j++)
+		{
+			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(fireMonsters.at(j)->getGlobalBounds(), areaCollision) && fireMonsters.at(j)->IsActive())
+			{
+				//hack to avoid bullet collision with sprites's transparent area
+				if (areaCollision.width >= 10)
+				{
+					fireMonsters.at(j)->TakeDamage();
 					mPlayer->bullets.at(i)->SetActive(false);
 				}
 			}
