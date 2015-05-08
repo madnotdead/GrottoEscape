@@ -76,20 +76,6 @@ ItemType Item::GetType()
 	return type;
 }
 
-sf::FloatRect Item::getAdjustedGlobalBounds()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
-	{
-		std::cout << "getGlobalBounds().left + " << getGlobalBounds().left  << std::endl;
-		std::cout << "getGlobalBounds().top +" << getGlobalBounds().top  << std::endl;
-		std::cout << "getGlobalBounds().width +" << getGlobalBounds().width  << std::endl;
-		std::cout << "getGlobalBounds().height +" << getGlobalBounds().height  << std::endl;
-	}
-
-
-	return sf::FloatRect(getGlobalBounds().left + offSet, getGlobalBounds().top + offSet, getGlobalBounds().width - offSet, getGlobalBounds().height - offSet);
-}
-
 bool Item::Collected()
 {
 	return !IsActive();

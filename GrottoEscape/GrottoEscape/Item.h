@@ -27,7 +27,6 @@ public:
 	void SetActive(bool active);
 	void Update(sf::Time dt);
 	ItemType GetType();
-	sf::FloatRect getAdjustedGlobalBounds();
 	bool Collected();
 };
 
