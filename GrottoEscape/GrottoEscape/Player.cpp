@@ -55,6 +55,13 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	winAnimation.setSpriteSheet(texture);
 	winAnimation.addFrame(sf::IntRect(32, 16, 16, 16));
 
+	if (!damageTexture.loadFromFile("img/damage.png"))
+	{
+		std::cout << "Couldnt load damage.png!" << std::endl;
+	}
+
+	hitAnimation.setSpriteSheet(damageTexture);
+	hitAnimation.addFrame(sf::IntRect(0, 0, 16, 16));
 	currentAnimation = &idleAnimationRight;
 
 	speed = 80.f;
@@ -63,19 +70,15 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 
 	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
 	playerVelocity = sf::Vector2f(0, 0);
+	
 	GetLayers();
-		
-	jumpF = 400;
-	mass = 75;
 
 	jumpRate = 0.6f;
 	shootRate = 0.5f;
 
 	for (size_t i = 0; i < 10; i++)
-	{
 		bullets.push_back(new Bullet(collisionObjects));
-	}
-
+	
 	jumpBuffer = new sf::SoundBuffer;
 
 	if (!jumpBuffer->loadFromFile("audio/jump.wav"))
@@ -140,6 +143,8 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 
 	winRate = 0.5f;
 	currentState = PlayerState::ALIVE; 
+
+	health = 3;
 }
 
 Player::~Player()
@@ -232,10 +237,17 @@ void Player::Update(sf::Time dt)
 
 		//To avoid player from being hit constantly
 		if (timeSinceLastHit > 0)
+		{
+
+			if (timeSinceLastHit >= 2.0f)
+				currentAnimation = &hitAnimation;
+
 			timeSinceLastHit -= dt.asSeconds();
+			
+		}
 
 		// if no key was pressed stop the animation
-		if (noKeyWasPressed)
+		if (noKeyWasPressed )
 		{
 			stop();
 
@@ -349,7 +361,6 @@ void Player::HandleCollision()
 						// Down side crash
 						onGround = true;
 						isJumping = false;
-						inAir = 0.f;
 						playerVelocity.y = 0;
 						setPosition({ getPosition().x, getPosition().y - area.height });
 						//std::cout << "Down side crash" << std::endl;
@@ -422,6 +433,7 @@ void Player::Hit(int damage)
 		playerVelocity.y = -300;
 		health -= damage;
 		hurtSound->play();
+		currentAnimation = &hitAnimation;
 	}
 	
 
@@ -440,14 +452,18 @@ void Player::HandleItemCollision(Item *mItem)
 
 	if (!mItem->IsActive())
 		return;	
+
 	bool final = false;
+
 	switch (mItem->GetType())
 	{
 	case POWER_UP:
 		std::cout << "Power up item collected." << std::endl;
 		break;
-	case OBJECTIVE:
+	case HEALTH:
 		std::cout << "Objective collected." << std::endl;
+		if (health < 6)
+			health++;
 		break;
 	case SPAWN:
 		std::cout << "Spawn item collected." << std::endl;

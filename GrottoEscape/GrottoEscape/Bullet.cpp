@@ -4,6 +4,7 @@
 
 Bullet::Bullet(std::vector<tmx::MapObject> _collisionObjects) :AnimatedSprite(sf::seconds(0.2f), true, false)
 {
+
 	if (!texture.loadFromFile("img/items.png"))
 	{
 		std::cout << "Failed to load player spritesheet: items.png!" << std::endl;

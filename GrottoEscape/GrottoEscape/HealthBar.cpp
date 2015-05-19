@@ -72,7 +72,9 @@ void HealthBar::Update(sf::Time dt)
 	default:
 		break;
 	}
+
 	play(currentAnimation);
+
 	update(dt);
 }
 
@@ -83,14 +85,10 @@ void HealthBar::SetHealthState(int healthType)
 
 void HealthBar::SetActive(bool active)
 {
-	//SetHealthState(6);
-
 	this->active = active;
 }
 
 bool HealthBar::IsActive()
 {
-	
-	
 	return active;
 }

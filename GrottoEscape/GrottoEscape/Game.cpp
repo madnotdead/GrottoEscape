@@ -20,12 +20,13 @@ Game::Game(int width, int height)
 	pauseSound = new sf::Sound(*pauseBuffer);
 	pauseSound->setVolume(100.0f);
 
-	if (!introTexture.loadFromFile("img/intro.png"))
-	{
-		std::cout << "Couldnt load intro.png" << std::endl;
-	}
+	//if (!introTexture.loadFromFile("img/intro.png"))
+	//{
+	//	std::cout << "Couldnt load intro.png" << std::endl;
+	//}
 	
-	introImage.setTexture(introTexture);
+	imageManager.AddResourceDirectoy("img/");
+	introImage.setTexture(imageManager.GetImage("intro.png"));
 	introImage.setPosition(0, 0);
 }
 
@@ -73,6 +74,9 @@ void Game::HandleInput()
 					{
 						if (currentState == GameStates::PLAYING)
 						{
+							//map->Load("map_test_2.tmx");
+							//layers.clear();
+							//layers = map->GetLayers();
 							GenerateItems(layers);
 							main->stop();
 							main->play();
@@ -172,25 +176,21 @@ void Game::MainLoop()
 
 				for (size_t i = 0; i < fireMonsters.size(); i++)
 					fireMonsters.at(i)->Update(TimePerFrame);
-
 			}
 	
 			//Collision Detection
-
 			HandleCollision();
 
 			hBar->SetHealthState(mPlayer->GetHealth());
 
-
-
-			if (mPlayer->getPosition().x > 120 && mPlayer->getPosition().x < 1160)
-				view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 50);
+			if (mPlayer->getPosition().x > 120 && mPlayer->getPosition().x < 2278)
+				view.setCenter(mPlayer->getPosition().x, mPlayer->getPosition().y - 30);
 			else
 			{
-				if (mPlayer->getPosition().x < 1160)
-					view.setCenter(120, mPlayer->getPosition().y - 50);
+				if (mPlayer->getPosition().x < 2278)
+					view.setCenter(120, mPlayer->getPosition().y - 30);
 				else
-					view.setCenter(1160, mPlayer->getPosition().y - 50);
+					view.setCenter(2278, mPlayer->getPosition().y - 30);
 			}
 
 			hBar->setPosition(view.getCenter().x - 105, view.getCenter().y - 75);
@@ -221,6 +221,7 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 	if (layers.size() <= 0)
 		return;
 
+	
 	std::cout << "Generating level..." << std::endl;
 
 	items.clear();
@@ -280,7 +281,15 @@ void Game::Draw()
 		for (size_t i = 0; i < fireMonsters.size(); i++)
 		{
 			if (fireMonsters.at(i)->IsActive())
-			wnd->draw(*fireMonsters.at(i));
+			{
+				for (size_t j = 0; j < fireMonsters.at(i)->spits.size(); j++)
+				{
+					if (fireMonsters.at(i)->spits.at(j)->isActive())
+						wnd->draw(*fireMonsters.at(i)->spits.at(j));
+				}
+				wnd->draw(*fireMonsters.at(i));
+			}
+		
 		}
 
 		//Draw active slimes
@@ -312,6 +321,7 @@ void Game::Draw()
 
 void Game::HandleCollision()
 {
+	sf::FloatRect playerAreaCollision;
 	for (size_t i = 0; i < fireMonsters.size(); i++)
 	{
 		if (!fireMonsters.at(i)->IsActive())
@@ -319,6 +329,19 @@ void Game::HandleCollision()
 
 		if (fireMonsters.at(i)->getGlobalBounds().intersects(mPlayer->getGlobalBounds()))
 			mPlayer->Hit(2);
+
+		for (size_t u = 0; u < fireMonsters.at(i)->spits.size(); u++)
+		{
+			if (fireMonsters.at(i)->spits.at(u)->isActive())
+			{
+				if (mPlayer->getGlobalBounds().intersects(fireMonsters.at(i)->spits.at(u)->getGlobalBounds(), playerAreaCollision))
+				{
+					if (playerAreaCollision.width > 5 && playerAreaCollision.height > 5)
+						mPlayer->Hit(1);	
+				}
+					
+			}
+		}
 	}
 
 	sf::FloatRect itemAreaCollision;
@@ -369,7 +392,7 @@ void Game::HandleCollision()
 			if (mPlayer->bullets.at(i)->getGlobalBounds().intersects(fireMonsters.at(j)->getGlobalBounds(), areaCollision) && fireMonsters.at(j)->IsActive())
 			{
 				//hack to avoid bullet collision with sprites's transparent area
-				if (areaCollision.width >= 10)
+				if (areaCollision.width >= 10 && areaCollision.height >= 5)
 				{
 					fireMonsters.at(j)->TakeDamage();
 					mPlayer->bullets.at(i)->SetActive(false);
@@ -377,5 +400,4 @@ void Game::HandleCollision()
 			}
 		}
 	}
-
 }

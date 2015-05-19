@@ -19,7 +19,7 @@ Item::Item(sf::Vector2f _position, ItemType _type)
 	case POWER_UP:
 		currentAnimation->addFrame(sf::IntRect(0, 48, 16, 16));
 		break;
-	case OBJECTIVE:
+	case HEALTH:
 		currentAnimation->addFrame(sf::IntRect(16, 48, 16, 16));
 		break;
 	case SPAWN:
@@ -35,14 +35,10 @@ Item::Item(sf::Vector2f _position, ItemType _type)
 		currentAnimation->addFrame(sf::IntRect(0, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(16, 0, 16, 16));
 		currentAnimation->addFrame(sf::IntRect(32, 0, 16, 16));
-
 		break;
 	default:
 		break;
 	}
-
-
-	offSet = 6;
 }
 
 
@@ -62,7 +58,6 @@ bool Item::IsActive()
 
 void Item::Update(sf::Time dt)
 {
-
 	if (!IsActive())
 		return;
 

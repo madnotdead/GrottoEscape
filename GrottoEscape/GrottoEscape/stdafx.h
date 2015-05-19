@@ -25,3 +25,5 @@
 #include "ImageManager.h"
 #include "Utils.h"
 #include "HealthBar.h"
+#include "GameManager.h"
+#include "GameStateIntro.h"

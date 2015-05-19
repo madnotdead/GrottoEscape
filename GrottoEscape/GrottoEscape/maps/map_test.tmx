@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="21" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="22" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
   <image source="tiles.png" width="128" height="80"/>
  </tileset>
- <layer name="Tiles" width="80" height="21">
+ <layer name="Tiles" width="150" height="22">
   <data encoding="base64" compression="zlib">
-   eJztlm0PgiAQgF2mW/ayldZK/ZL2/39jssF2u51wIKgZH55xCir3cKh9kiR9JBKJ/DndCubwy3TRoTeHW/Q4d15bdBhz1uc+Nf9/9mfjg+sp1bB0bkuhcwLZDxSSAxG/V5CLCztEilqqTwGdKBcUBQMXf3O8HygPtvm7OrFh6frj+Fkzyh+sdc4e0NWHrg+OEZ5UTYSojZC8Bmrp7oP6XGs/xL65SuC5auAGjsdi6tinNwX2R3FC6MaWsj16mGtDUDNiPF7QgnvfQXwB8QOtk84b9If9cF1BR6VhLHUNhcrN97tZ5JlJchBnxPkcOBOYvpkNWp8xuPsBj6sY18C1fyJ/nH9gU47C39kCm/VTjuuZaYl1V+3U+sM+Q/ozPZvb5/KMsfn7mCvGxh/3nl8DHLM/
+   eJztmdtuwyAMhumyRuphlba205r2pof3f8YFCTTHM2BzSGmUi1+hQAi2vxhI70qp+6xZsyajW6Y+s6YhaazHZMP3rNR5zIyPE6dS8XzV+Lnm/ar2zKpbNzWzlUNvvRpzfUO/cT1ut+WUGFJl7j2ldFPT5SuHXdT9kI/3XntCK4+o/osK/FUyDs+eQ+02P9SQHYoRjrbqP4fXiuJZ8jxQu0rlI99+FHKFtfG0UX036L6YnBVr/9TZKMFaih+pvRBn3cuRt3TO0mw1arj3aoQ+CNlQQs+O+zPUMAWZWTnKMbnJtfZ9C+5doDhi9uwV28Bdq6l+oXth+7NjHCPXWarxtLnyi2QvLdVO8Zg7Ro6P58m1Qc9nnclG17sljekY6zDFh5SLUqxIeApxQ9WHGIzJixIecA7dE22cOdSUd6T7FZd9JXxP6YB+c/KOJDel2sHlpYRgfO2+IrSW+PKJrw320fzYHBKTS0qz4xv/1Kszvjubsr5ehM/QXH6hOvy7Bm2Vn0vKV/icHLuGlFh/Po18sXCVS8QI8kRJ+3LZqzVagusStdmxMIsnok7qM3il6g5EH2qM0DkCtmO2fN9fIK9rFeY2xLA0hmdCHaOM++P4wbUI7oWgn+AaF+LJ7jm1Lz+Yuqohi3oeramHfB5BW2vKO1NvmbW+6tTQZsoflC7qj3sO15xzq7ZhrYbccBmKYYd7Nsr9rdnGisohuB7mEy3uf26xXOF6yThwrNjz14N4PsWRiyfYbmX3CJzcy11XcD+8vw29Az/IV5xvm6FzaslYpearnFzFnNcprvB7Rr17rjW/NePad7IbWTb/UvNKzVfYv2PkgBq4CvmBy5Xk+ZSkc8n1/cr+t5YaV+58UmMljQ9nfMoHY6yDvneuJFdjKQdXOZ415XwlnXcurn4Be4JY4Q==
   </data>
  </layer>
  <objectgroup name="Collision">
@@ -17,48 +17,108 @@
   <object x="1072.2" y="256.167" width="15.5417" height="15.8333"/>
   <object x="544.208" y="288.042" width="15.2917" height="15.75"/>
   <object x="575.917" y="272.125" width="15.6667" height="15.75"/>
-  <object x="1" y="1" width="495" height="239"/>
-  <object x="495" y="0" width="97.0625" height="224"/>
+  <object x="1" y="225" width="495" height="13"/>
+  <object x="497" y="205.5" width="92.5625" height="16.5"/>
   <object x="592" y="0" width="127.938" height="207.875"/>
   <object x="720" y="-1" width="256" height="192.938"/>
   <object x="978" y="-1" width="174" height="177"/>
-  <object x="1153" y="-1" width="126.688" height="160.938"/>
-  <object x="1120.06" y="272.062" width="160" height="46"/>
-  <object x="1167.95" y="256" width="111.653" height="16.0284"/>
-  <object x="1200" y="240" width="79.7273" height="15.9091"/>
-  <object x="1232" y="223.909" width="47.9091" height="15.9091"/>
+  <object x="1120.06" y="272.062" width="45.3333" height="12.6667"/>
+  <object x="1167.95" y="256" width="32.3197" height="16.6951"/>
+  <object x="1200" y="240" width="34.394" height="15.9091"/>
+  <object x="1232" y="223.909" width="110.576" height="20.5758"/>
   <object x="0.125" y="240.062" width="15.6875" height="64.25"/>
   <object x="512" y="312.312" width="95.75" height="7.375">
    <properties>
     <property name="IsLava" value="true"/>
    </properties>
   </object>
-  <object x="945" y="281" width="174" height="31.5">
+  <object x="945" y="281" width="176.5" height="15">
    <properties>
     <property name="IsLava" value="true"/>
    </properties>
   </object>
-  <object x="1264.04" y="159.958" width="15.875" height="63.9583"/>
   <object x="16" y="288" width="31.9375" height="16"/>
+  <object x="1504.48" y="240.061" width="47.1515" height="96"/>
+  <object x="1360.68" y="192.5" width="16" height="14.9848"/>
+  <object x="1391.18" y="176.091" width="16" height="15.8182"/>
+  <object x="1423.75" y="191.591" width="16" height="15.8182"/>
+  <object x="1472.36" y="207.727" width="16" height="15.8182"/>
+  <object x="1343.25" y="251.5" width="160.5" height="14.5">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1328" y="208.216" width="16" height="15.8182"/>
+  <object x="1520.25" y="192.091" width="16" height="15.8182"/>
+  <object x="1552" y="175.966" width="16" height="15.8182"/>
+  <object x="1600.25" y="240.133" width="31.625" height="27.0682"/>
+  <object x="1552" y="265.466" width="48.25" height="3.9432">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1632.25" y="264.841" width="31.75" height="5.9432">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1664.12" y="255.841" width="31.75" height="15.9432"/>
+  <object x="1696.75" y="263.466" width="30.625" height="4.6932">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1728.12" y="256.091" width="47.875" height="8.5682"/>
+  <object x="1775.75" y="262.716" width="32.625" height="4.3182">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="1808.25" y="255.966" width="273.375" height="8.9432"/>
+  <object x="1568.09" y="256.045" width="16.0909" height="9.54545"/>
+  <object x="1584.25" y="160.091" width="16" height="15.8182"/>
+  <object x="1153.5" y="111.5" width="141.5" height="48"/>
+  <object x="1292.25" y="96" width="69.5" height="15.5"/>
+  <object x="1360.25" y="81.75" width="271" height="13.5"/>
+  <object x="1633" y="93.5" width="18.5" height="18.5"/>
+  <object x="1648.75" y="113.25" width="33" height="30.5"/>
+  <object x="1666.5" y="143.75" width="106" height="16"/>
+  <object x="1761" y="160" width="174.5" height="16"/>
+  <object x="1919.5" y="148" width="483.667" height="9.5"/>
+  <object x="2160.67" y="240.667" width="15.1515" height="15.2121"/>
+  <object x="2192.27" y="272.091" width="14.4242" height="14.6667"/>
+  <object x="2224.88" y="271.97" width="14.3333" height="13.8485"/>
+  <object x="2256.48" y="256.424" width="15.3333" height="15.5758"/>
+  <object x="2288.12" y="240.424" width="15.8788" height="15.394"/>
+  <object x="2320.19" y="272.125" width="14.7519" height="14.6894"/>
+  <object x="2353.3" y="271.992" width="48.606" height="16.4849"/>
+  <object x="2112.79" y="255.818" width="30.6666" height="92.6667"/>
+  <object x="2080.35" y="266.508" width="32.625" height="4.3182">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
+  <object x="2144.67" y="300.667" width="255.333" height="3.33333">
+   <properties>
+    <property name="IsLava" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Player">
-  <object x="19.5151" y="272.015" width="9.45455" height="9.45455"/>
+  <object x="23.4375" y="269.708" width="13.125" height="11.25"/>
  </objectgroup>
  <objectgroup name="Waypoints">
   <object name="Slime1" x="48.5" y="289.188" width="15" height="14.5"/>
   <object name="Slime1" x="497" y="287.75" width="15" height="14.5"/>
   <object name="Slime2" x="609" y="238.25" width="15" height="14.5"/>
   <object name="Slime2" x="929" y="238.75" width="15" height="14.5"/>
+  <object name="Slime3" x="1817.5" y="237.25" width="15" height="14.5"/>
+  <object name="Slime3" x="2067" y="237.75" width="15" height="14.5"/>
  </objectgroup>
  <objectgroup name="Items">
   <object x="199.333" y="271.333" width="28" height="21.3333" visible="0">
    <properties>
     <property name="ItemType" value="1"/>
-   </properties>
-  </object>
-  <object x="380" y="270" width="28" height="21.3333">
-   <properties>
-    <property name="ItemType" value="0"/>
    </properties>
   </object>
   <object x="659.333" y="232.667" width="28" height="21.3333" visible="0">
@@ -71,7 +131,17 @@
     <property name="ItemType" value="3"/>
    </properties>
   </object>
-  <object x="1244.67" y="208" width="9.33333" height="8.66667">
+  <object x="434" y="268" width="30.6667" height="25.3333">
+   <properties>
+    <property name="ItemType" value="1"/>
+   </properties>
+  </object>
+  <object x="1580.67" y="136.833" width="12.6667" height="15">
+   <properties>
+    <property name="ItemType" value="1"/>
+   </properties>
+  </object>
+  <object x="2371.09" y="253.273" width="13.697" height="11.0909">
    <properties>
     <property name="ItemType" value="4"/>
    </properties>
@@ -80,6 +150,8 @@
  <objectgroup name="Enemies">
   <object name="Slime1" type="S" x="49" y="289.25" width="10" height="10.25"/>
   <object name="Slime2" type="S" x="929.25" y="238.625" width="10" height="10.25"/>
-  <object name="FireMonster1" type="F" x="1136.92" y="255.25" width="13" height="14.25"/>
+  <object name="FireMonster1" type="F" x="1136.42" y="255.416" width="13" height="14.25"/>
+  <object name="FireMonster1" type="F" x="1746" y="239.875" width="13" height="14.25"/>
+  <object name="Slime3" type="S" x="2054" y="241.375" width="10" height="10.25"/>
  </objectgroup>
 </map>

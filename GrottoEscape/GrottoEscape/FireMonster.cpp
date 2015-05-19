@@ -30,6 +30,9 @@ FireMonster::FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> colli
 	jumpTime = 0;
 	setPosition(position);
 	active = true;
+	spitRate = 2.0f;
+	for (size_t i = 0; i < 10; i++)
+		spits.push_back(new Bullet(this->collisionObjects));
 }
 
 
@@ -47,9 +50,18 @@ void FireMonster::Update(sf::Time dt)
 	if (jumpTime >= jumpRate)
 	{
 		jumpTime = 0;
-		jumpRate = Utils::GetRandomIntValue(3, 7);
+		jumpRate = Utils::GetRandomIntValue(2, 4);
 
 		velocity.y = -275;
+	}
+
+	spiteTime += dt.asSeconds();
+
+	if (spiteTime >= spitRate)
+	{
+		spiteTime = 0;
+		//spitRate = Utils::GetRandomIntValue(1, 3);
+		SpitFire();
 	}
 
 	if (!onGround || velocity.y < 0)//Sino esta en el piso aplico gravedad
@@ -61,6 +73,12 @@ void FireMonster::Update(sf::Time dt)
 	update(dt);
 	play(*currentAnimation);
 	HandleCollision();
+
+	//updateBullets
+	for (size_t i = 0; i < 10; i++)
+	{
+		spits[i]->Update(dt);
+	}
 }
 
 void FireMonster::HandleCollision()
@@ -124,4 +142,17 @@ void FireMonster::TakeDamage()
 
 	if (hit == 2)
 		SetActive(false);
+}
+
+void FireMonster::SpitFire()
+{
+	for (size_t i = 0; i < 10; i++)
+	{
+		if (spits[i]->isActive())
+			continue;
+
+		spits[i]->SetActive(true);
+		spits[i]->SetInitialPosition(sf::Vector2f(getPosition().x - 16, getPosition().y), false);
+		break;
+	}
 }

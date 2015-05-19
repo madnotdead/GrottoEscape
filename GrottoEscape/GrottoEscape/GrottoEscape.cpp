@@ -48,5 +48,11 @@ int main()
 	Game* _game = new Game(800, 600);
 	_game->MainLoop();
 
+	//GameManager game;
+
+
+	//game.pushState(new GameStateIntro(&game));
+	//game.gameLoop();
+
 	return EXIT_SUCCESS;
 }

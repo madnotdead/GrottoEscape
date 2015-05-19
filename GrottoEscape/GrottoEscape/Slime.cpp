@@ -85,7 +85,7 @@ void Slime::Update(sf::Time dt)
 		currentAnimation = &walkingLeft;
 	}
 
-	if (currentPoint.x ==  roundf(getPosition().x))
+	if (roundf(currentPoint.x) == roundf(getPosition().x))
 		facingRight = !facingRight;
 
 	if (!onGround || playerVelocity.y < 0)//Sino esta en el piso aplico gravedad

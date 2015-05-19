@@ -89,6 +89,10 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="FireMonster.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateIntro.h" />
+    <ClInclude Include="GameStatePlay.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="interpolate.h" />
@@ -129,7 +133,14 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="FireMonster.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GameStateIntro.cpp" />
+    <ClCompile Include="GameStatePlay.cpp" />
     <ClCompile Include="GrottoEscape.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

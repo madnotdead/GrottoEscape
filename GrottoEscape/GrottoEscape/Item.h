@@ -5,7 +5,7 @@
 enum ItemType
 {
 	POWER_UP,
-	OBJECTIVE,
+	HEALTH,
 	SPAWN,
 	COLLECTABLE,
 	FINAL
@@ -19,7 +19,6 @@ private:
 	sf::Texture texture;
 	bool active;
 	ItemType type;
-	int offSet;
 public:
 	Item(sf::Vector2f position, ItemType type);
 	~Item();
