@@ -2,24 +2,15 @@
 #include "Player.h"
 
 
-Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :AnimatedSprite(sf::seconds(0.2f), true, false)
+Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers, ImageManager &imageManager) :AnimatedSprite(sf::seconds(0.2f), true, false)
 {
 	window = wnd;
 	layers = _layers;
 	onGround = false;
 
-	// load texture (spritesheet)
-	if (!texture.loadFromFile("img/player_2.png"))
-	{
-		std::cout << "Failed to load player spritesheet: player_2.png!" << std::endl;
-	}
+	texture = imageManager.GetImage("player_2.png");
+	textureInverted = imageManager.GetImage("player_2_i.png");
 
-	//sf::Texture textureInverted;
-	if (!textureInverted.loadFromFile("img/player_2_i.png"))
-	{
-		std::cout << "Failed to load player spritesheet: player_2_i.png!" << std::endl;
-	}
-	
 	// set up the animations for all four directions (set spritesheet and push frames)
 	idleAnimationRight.setSpriteSheet(texture);
 	idleAnimationRight.addFrame(sf::IntRect(16, 16, 16, 16));
@@ -57,7 +48,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 
 	if (!damageTexture.loadFromFile("img/damage.png"))
 	{
-		std::cout << "Couldnt load damage.png!" << std::endl;
+		//std::cout << "Couldnt load damage.png!" << std::endl;
 	}
 
 	hitAnimation.setSpriteSheet(damageTexture);
@@ -77,7 +68,7 @@ Player::Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers ) :Anim
 	shootRate = 0.5f;
 
 	for (size_t i = 0; i < 10; i++)
-		bullets.push_back(new Bullet(collisionObjects));
+		bullets.push_back(new Bullet(collisionObjects,imageManager));
 	
 	jumpBuffer = new sf::SoundBuffer;
 
@@ -209,7 +200,7 @@ void Player::Update(sf::Time dt)
 
 			Shoot();
 			shootSound->play();
-			std::cout << "ShootSpawn: " << shootSpawn.x << "," << shootSpawn.y << std::endl;
+			//std::cout << "ShootSpawn: " << shootSpawn.x << "," << shootSpawn.y << std::endl;
 			shootTime = 0.0f;
 
 			noKeyWasPressed = false;
@@ -235,15 +226,14 @@ void Player::Update(sf::Time dt)
 				currentAnimation = &jumpLeftAnimation;
 		}
 
-		//To avoid player from being hit constantly
-		if (timeSinceLastHit > 0)
-		{
 
-			if (timeSinceLastHit >= 2.0f)
-				currentAnimation = &hitAnimation;
-
+		if (timeSinceLastHit > 0){
 			timeSinceLastHit -= dt.asSeconds();
-			
+			// el personaje fue golpeado recientemente, hacemos que parpadee
+			setAlpha(((int(timeSinceLastHit * 100)) % 2) * 255);
+		}
+		else{
+			setAlpha(255);
 		}
 
 		// if no key was pressed stop the animation
@@ -278,7 +268,7 @@ void Player::Update(sf::Time dt)
 	case PlayerState::DEAD:
 		
 		//ApplyGravity();
-
+		setAlpha(255);//In case you died while getting transparent set alpha to 255 to make you visible
 		currentAnimation = &deadAnimation;
 		health = 0;
 
@@ -299,7 +289,7 @@ void Player::Update(sf::Time dt)
 		
 	newPostion.y = getPosition().y + playerVelocity.y * dt.asSeconds() + 4.9f * (dt.asSeconds() * 2);
 	newPostion.x = getPosition().x + playerVelocity.x * dt.asSeconds();
-	//move(playerVelocity * dt.asSeconds());
+	
 	setPosition(newPostion);
 	
 	play(*currentAnimation);
@@ -371,7 +361,7 @@ void Player::HandleCollision()
 						playerVelocity.y = 0;
 						// Up side crash
 						setPosition({ getPosition().x, getPosition().y + area.height });
-						std::cout << "Up side crash" << std::endl;
+						//std::cout << "Up side crash" << std::endl;
 					}
 				}
 				else if (area.width < area.height)
@@ -380,13 +370,13 @@ void Player::HandleCollision()
 					{
 						//Right side crash
 						setPosition({ getPosition().x - area.width, getPosition().y });
-						std::cout << "Right side crash" << std::endl;
+						//std::cout << "Right side crash" << std::endl;
 					}
 					else
 					{
 						//Left side crash
 						setPosition({ getPosition().x + area.width, getPosition().y });
-						std::cout << "Left side crash" << std::endl;
+						//std::cout << "Left side crash" << std::endl;
 					}
 				}
 			}
@@ -442,9 +432,6 @@ void Player::Hit(int damage)
 		isDead = true;
 		currentState = PlayerState::DEAD;
 	}
-		
-	//std::cout << "playerVelocity.x: " << playerVelocity.x << std::endl;
-
 }
 
 void Player::HandleItemCollision(Item *mItem)
@@ -458,18 +445,18 @@ void Player::HandleItemCollision(Item *mItem)
 	switch (mItem->GetType())
 	{
 	case POWER_UP:
-		std::cout << "Power up item collected." << std::endl;
+		//std::cout << "Power up item collected." << std::endl;
 		break;
 	case HEALTH:
-		std::cout << "Objective collected." << std::endl;
+		//std::cout << "Objective collected." << std::endl;
 		if (health < 6)
 			health++;
 		break;
 	case SPAWN:
-		std::cout << "Spawn item collected." << std::endl;
+		//std::cout << "Spawn item collected." << std::endl;
 		break;
 	case COLLECTABLE:
-		std::cout << "collectable item collected." << std::endl;
+		//std::cout << "collectable item collected." << std::endl;
 		break;
 	case FINAL:
 		//std::cout << "Final item collected." << std::endl;

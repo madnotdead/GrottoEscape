@@ -2,14 +2,15 @@
 #include "FireMonster.h"
 
 
-FireMonster::FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> collisionObjects) :AnimatedSprite(sf::seconds(0.16f), true, false)
+FireMonster::FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> collisionObjects, ImageManager &imageManager) :AnimatedSprite(sf::seconds(0.16f), true, false)
 {
-	if (!texture.loadFromFile("img/enemies.png"))
+	texture = imageManager.GetImage("enemies.png");
+	/*if (!texture.loadFromFile("img/enemies.png"))
 	{
 		std::cout << "Couldn't load firemoster texture!" << std::endl;
 		return;
 	}
-
+*/
 	for (size_t i = 0; i < collisionObjects.size(); i++)
 	{
 		if (collisionObjects.at(i).name == "Collision")
@@ -32,7 +33,7 @@ FireMonster::FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> colli
 	active = true;
 	spitRate = 2.0f;
 	for (size_t i = 0; i < 10; i++)
-		spits.push_back(new Bullet(this->collisionObjects));
+		spits.push_back(new Bullet(this->collisionObjects,imageManager));
 }
 
 

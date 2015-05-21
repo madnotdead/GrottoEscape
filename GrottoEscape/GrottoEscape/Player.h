@@ -15,7 +15,7 @@ class Player :
 	public AnimatedSprite
 {
 public:
-	Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers);
+	Player(sf::RenderWindow *wnd, std::vector<tmx::MapLayer> _layers, ImageManager &imageManager);
 	~Player();
 	void Update(sf::Time dt);
 	void HandleCollision();

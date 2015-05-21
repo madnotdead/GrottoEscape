@@ -2,23 +2,10 @@
 #include "Slime.h"
 
 
-Slime::Slime(std::vector<tmx::MapLayer> _layers, std::string name) :AnimatedSprite(sf::seconds(0.2f), true, false)
-
+Slime::Slime(std::vector<tmx::MapLayer> _layers, std::string name, ImageManager &imageManager) :AnimatedSprite(sf::seconds(0.2f), true, false)
 {
-	if (!normalTexture.loadFromFile("img/enemies.png"))
-	{
-		std::cout << "failed to load: enemies.png!" << std::endl;
-		//return 1;
-	}
-	else
-		std::cout << "items.png loaded!" << std::endl;
-
-	//sf::Texture textureInverted;
-	if (!invertedTexture.loadFromFile("img/enemies2.png"))
-	{
-		std::cout << "failed to load: enemies.png!" << std::endl;
-		//return 1;
-	}
+	normalTexture = imageManager.GetImage("enemies.png");
+	invertedTexture = imageManager.GetImage("enemies2.png");
 
 	walkingRight.setSpriteSheet(normalTexture);
 	walkingRight.addFrame(sf::IntRect(0, 0, 16, 16));
@@ -71,17 +58,20 @@ void Slime::Update(sf::Time dt)
 		return;
 
 	float xPosition;
+	currentAnimation = &walkingRight;
 
 	if (facingRight)
 	{
 		currentPoint = points.at(1);
 		currentAnimation = &walkingRight;
+	//	setScale(1, 1);
 		xPosition = getPosition().x + speed * dt.asSeconds();
 	}
 	else
 	{
 		currentPoint = points.at(0);
 		xPosition = getPosition().x - speed * dt.asSeconds();
+		//setScale(-1, 1);
 		currentAnimation = &walkingLeft;
 	}
 

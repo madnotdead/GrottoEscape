@@ -5,7 +5,7 @@ class FireMonster :
 	public AnimatedSprite
 {
 public:
-	FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> collisionObjects);
+	FireMonster(sf::Vector2f position, std::vector<tmx::MapLayer> collisionObjects, ImageManager &imageManager);
 	~FireMonster();
 	void Update(sf::Time dt);
 	void HandleCollision();

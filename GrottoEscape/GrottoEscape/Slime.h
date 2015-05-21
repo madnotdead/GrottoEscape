@@ -2,6 +2,7 @@
 #include "AnimatedSprite.h"
 #include "stdafx.h"
 #include <stdio.h>
+#include "ImageManager.h"
 #include <SFML\Audio.hpp>
 class Slime : public AnimatedSprite
 {
@@ -24,7 +25,7 @@ private:
 	sf::Sound *hitSound;
 	//std::vector<tmx::MapObject> collisionObjects;
 public:
-	Slime(std::vector<tmx::MapLayer> _layers, std::string name);
+	Slime(std::vector<tmx::MapLayer> _layers, std::string name, ImageManager &imageManager);
 	Slime(sf::Vector2f position, std::string name);
 	~Slime();
 	void HandleCollision();

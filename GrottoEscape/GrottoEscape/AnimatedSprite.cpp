@@ -80,6 +80,12 @@ void AnimatedSprite::setColor(const sf::Color& color)
 	m_vertices[3].color = color;
 }
 
+void AnimatedSprite::setAlpha(int alpha)
+{
+	for (int i = 0; i < 4; ++i)
+		m_vertices[i].color.a = alpha;
+}
+
 const Animation* AnimatedSprite::getAnimation() const
 {
 	return m_animation;

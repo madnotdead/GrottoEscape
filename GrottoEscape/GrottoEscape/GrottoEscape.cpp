@@ -41,9 +41,10 @@ exists by request.
 #include <sstream>
 #include <cassert>
 #include "stdafx.h"
-
+#include "windows.h"
 int main()
 {
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	Game* _game = new Game(800, 600);
 	_game->MainLoop();

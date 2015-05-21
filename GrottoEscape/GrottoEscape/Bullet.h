@@ -12,12 +12,10 @@ private:
 	bool CheckCollision();
 	bool collided;
 public:
-	Bullet(std::vector<tmx::MapObject> _collisionObjects);
+	Bullet(std::vector<tmx::MapObject> _collisionObjects, ImageManager &imageManager);
 	~Bullet();
 	sf::Texture texture;
-	sf::Texture inv_texture;
 	Animation normalAnimation;
-	Animation invAnimation;
 	Animation *currentAnimation;
 	Animation explotionAnimation;
 	void Update(sf::Time dt);

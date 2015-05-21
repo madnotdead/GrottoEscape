@@ -206,12 +206,9 @@ void Game::MainLoop()
 			clock.restart();
 		}
 
-		
-		
 		HandleInput();
 		
 		Draw();
-
 	}
 }
 
@@ -248,15 +245,15 @@ void Game::GenerateItems(std::vector<tmx::MapLayer> layers)
 			if (layer->name == "Enemies")
 			{
 				if (object->GetType() == "S")
-					slimes.push_back(new Slime(layers, object->GetName()));
+					slimes.push_back(new Slime(layers, object->GetName(),imageManager));
 
 				if (object->GetType() == "F")
-					fireMonsters.push_back(new FireMonster(object->GetPosition(), layers));
+					fireMonsters.push_back(new FireMonster(object->GetPosition(), layers, imageManager));
 			}
 
 			if (layer->name == "Player")
 			{
-				mPlayer = new Player(wnd, layers);
+				mPlayer = new Player(wnd, layers, imageManager);
 			}
 		}
 	}
@@ -363,8 +360,9 @@ void Game::HandleCollision()
 		if (!slimes.at(i)->getActive())
 			continue;
 
-		if (mPlayer->getGlobalBounds().intersects(slimes.at(i)->getGlobalBounds()))
-			mPlayer->Hit(1);
+		if (mPlayer->getGlobalBounds().intersects(slimes.at(i)->getGlobalBounds(), playerAreaCollision))
+			if (playerAreaCollision.width > 5 && playerAreaCollision.height > 5)
+				mPlayer->Hit(1);
 	}
 
 	for (size_t i = 0; i < mPlayer->bullets.size(); i++)
